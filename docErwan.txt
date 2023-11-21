@@ -1,0 +1,54 @@
+Doc
+
+Automate peut exister sous deux formes :
+- dictionnaire
+- tableau (dataframe pandas)
+
+Sous forme de dictionnaire, l'automate a la forme vu en cours.
+L'automate sous forme de dictionnaire contient les clés suivantes :
+- alphabet, dont la valeur contient une liste des 'lettres' (str) reconnues par l'alphabet
+- states, dont la valeur est une liste de str où chaque élément est un état,
+- initial_state, contenant une str égal à l'état de départ
+- final_states, contenant une liste de str égales aux états finaux,
+- transitions, qui contient un tableau (liste de liste) où chaque élément du tableau est une transition. La transition est une liste de 3 éléments, qui sont des str, où le premier élement est l'état de départ, le second l'état d'arrivée et le 3eme la lettre menant à cette transition
+
+Exemple :
+automate = {
+    'alphabet': ['a','b'],
+    'states' : ['0','1','2','3'],
+    'initial_state' : '0',
+    'final_states' : ['2','3'],
+    'transitions': [
+        ['0','1','b'],
+        ['0','3','a'],
+        ['1','1','a'],
+        ['1','2','b'],
+        ['3','3','a'] 
+    ]
+}
+(visualisation cours page 8 automate.pdf)
+
+Sous forme de dataframe, le tableau a  autant de ligne que de transitions et autant de colonne que de lettres dans l'alphabet + 2.
+L'index, lenom des lignes sont les états
+Les colonnes sont chaque lettre de l'alphabet plus une colonne pour l'état initial ('initial_state') et une pour les états finaux ('final_states')
+
+Pour les colonnes avec les lettres, le tableau contient l'état vers lequel renvoie la combinaison de l'état de départ (index de la ligne) et la lettre (colonne)
+Pour les 2 dernières colonne, le tableau contient un booléen (True / False) selon si l'état, défini par la ligne, est un état final ou non, initial ou non.
+
+Exemple : 
+df_automate = pd.DataFrame(index = ['0','1','2','3'], data = {
+    'a': ['3','1','-1','3'],
+    'b' : ['1','2','-1','-1'],
+    'initial_state': [True,False,False,False],
+    'final_states':[False,False,True,True]
+})
+(print pour visualiser, représentation égale à celle du dessus)
+
+Méthodes :
+
+dict_to_table(dict_automaton) : take an automaton under his dictionnary form and returns it under his dataframe form.
+table_to_dict(df_automaton) : take an automaton under his dataframe form and returns it under his dictionnary form.
+
+save_automaton(automaton,file_path) : take an automaton and a file_path then create a txt file containing the automaton. Only dict form supported as today.
+import_automaton(filepath) : read the file given and transform the value into a dictionnary (if it was one)
+is_word_recognized(automaton, word) : return a boolean according to if the word is recognized by the automaton or not
