@@ -110,12 +110,12 @@ def get_good_type(automaton,wanted_type) :
     return table_to_dict(automaton)
 
 # print(dict_to_table(automate) == df_auto)
-print(table_to_dict(df_auto))
-print(automate)
-print(automate == table_to_dict(df_auto))
+# print(table_to_dict(df_auto))
+# print(automate)
+# print(automate == table_to_dict(df_auto))
 # print(table_to_dict(dict_to_table(automate)))
 
-print(table_to_dict(dict_to_table(automate)) == automate)
+# print(table_to_dict(dict_to_table(automate)) == automate)
 
 
 # df_test = dict_to_table(automate)
@@ -139,50 +139,13 @@ def import_automaton(file_path) :
 #auto2 = import_automaton('test.txt')  
 # print(dict_to_table(auto2))
 
+def is_transition_valid(df, letter, state) :
+    if df[str(letter)].loc[str(state)] == null_transition :
+        return False
+    else : return df[str(letter)].loc[str(state)].split(', ')
 
-def is_word_recognized(automaton,word):
-    df = get_good_type(automaton,'dataFrame')
-    current_state = list(df[df.initial_state == True].index)[0]
-    w = word
-    while len(w) !=0 :
-        if df[w[0]].loc[str(current_state)] == null_transition :
-            return False
-        current_state = df[w[0]].loc[str(current_state)]
-        w = w[1:]
-    return df.final_states.loc[str(current_state)]
-        
-print(is_word_recognized(automate,'aaaaa'))
+print(is_transition_valid(df_auto,'a','0'))
 
-
-# print(df_auto.final_states.loc[str(3)])}))
-
-def is_complete(automaton) :
-    df = get_good_type(automaton,'dataFrame')
-    return not df[list(df_auto.columns)[:-2]].isin([null_transition]).any().any()
-
-
-#print(df_auto[list(df_auto.columns)[:-2]])
-#print(is_complete(automate))
-
-
-
-#print(get_good_type(df_auto,'dict'))
-
-def completing(automaton) :
-    df = get_good_type(automaton,'dataFrame')
-    data_phi = {}
-    for letter in df.columns :
-        data_phi[letter] = phi_transition
-        data_phi['initial_state'], data_phi['final_states'] = False, False
-    phi_state = pd.DataFrame( index=['phi'], data = data_phi)
-    df = pd.concat([df, phi_state])
-    df.replace(null_transition,phi_transition, inplace= True)
-    return df
-
-
-# print([phi_transition for _ in range(len(df_auto.columns)-2)])
-# print(range(len(df_auto.columns)-2))
-# print(completing(automate))
 
 
 
