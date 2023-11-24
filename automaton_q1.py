@@ -1,7 +1,7 @@
 import pandas as pd
 # import numpy as np
 
-null_transition = '-1'
+null_transition = 'null'
 phi_transition = 'phi'
 
 automate = {
@@ -10,23 +10,31 @@ automate = {
     'initial_state' : '0',
     'final_states' : ['2','3'],
     'transitions': [
-        ['0','1','b'],
+        ['0','0','b'],
+        ['0','1','a'],
         ['0','3','a'],
-        ['1','1','a'],
+
+        ['1','1','b'],
+        ['1','2','a'],
         ['1','2','b'],
-        ['3','3','a'] 
+
+        ['2','2','a'],
+        ['2','2','b'],
+
+        ['3','3','a']
     ]
 }
 
+
 df_auto = pd.DataFrame(index = ['0','1','2','3'], data = {
-    'a': ['3','1',null_transition,'3'],
-    'b' : ['1','2',null_transition,null_transition],
+    'a': ['1, 3','2','2','3'],
+    'b' : ['0','1, 2','2',null_transition],
     'initial_state': [True,False,False,False],
     'final_states':[False,False,True,True]
 })
-#print(df_auto)
+# print(df_auto)
 
-def dict_to_table(dico) :
+def dict_to_table(dico) : #ok
     states = dico['states']
     df = pd.DataFrame(index= states)
     for letter in dico['alphabet'] :
@@ -43,7 +51,12 @@ def dict_to_table(dico) :
                     if transition[0] == temp :
                         start_position = k
                     k+=1
-                values[start_position] = end_position   
+                if not end_position in values[start_position] : 
+                    values[start_position] = f'{values[start_position]}, {end_position}'
+        for value in values :
+            if ', ' in value :
+                values[values.index(value)] = value[len(null_transition)+2:]
+
         df[f'{letter}'] = values
 
     df['initial_state'] = False
@@ -72,22 +85,37 @@ def table_to_dict(df) :
     for col in list(df.columns[:-2]) :
         for row in list(df.index) :
             if df[str(col)].loc[str(row)] != null_transition:
-                transition.append([row,df[str(col)].loc[row],col])
-
-    dict = {
+                splitted_states = df[str(col)].loc[row].split(', ')
+                for arrival_state in splitted_states :
+                    transition.append([row,arrival_state,col])
+                        
+    dico = {
     'alphabet': list(df.columns[:-2]),
     'states' : list(df.index),
     'initial_state' : list(df[df.initial_state == True].index)[0],
     'final_states' : list(df[df.final_states == True].index),
     'transitions': sorted(transition)}
 
-    return dict
+    return dico
 
-# print(dict_to_table(automate))
-# print(table_to_dict(df_auto))
+def get_good_type(automaton,wanted_type) :
+    assert wanted_type in ['dict','dataFrame'] and type(automaton) in [dict, pd.DataFrame]
+    if wanted_type == 'dataFrame' :
+        if type(automaton)  == dict :
+            return dict_to_table(automaton)
+        return automaton
+        
+    if type(automaton) == dict :
+        return automaton
+    return table_to_dict(automaton)
+
+# print(dict_to_table(automate) == df_auto)
+print(table_to_dict(df_auto))
+print(automate)
+print(automate == table_to_dict(df_auto))
 # print(table_to_dict(dict_to_table(automate)))
 
-# print(table_to_dict(dict_to_table(automate)) == automate)
+print(table_to_dict(dict_to_table(automate)) == automate)
 
 
 # df_test = dict_to_table(automate)
@@ -123,7 +151,7 @@ def is_word_recognized(automaton,word):
         w = w[1:]
     return df.final_states.loc[str(current_state)]
         
-#print(is_word_recognized(automate,'aaaaa'))
+print(is_word_recognized(automate,'aaaaa'))
 
 
 # print(df_auto.final_states.loc[str(3)])}))
@@ -136,16 +164,6 @@ def is_complete(automaton) :
 #print(df_auto[list(df_auto.columns)[:-2]])
 #print(is_complete(automate))
 
-def get_good_type(automaton,wanted_type) :
-    assert wanted_type in ['dict','dataFrame'] and type(automaton) in [dict, pd.DataFrame]
-    if wanted_type == 'dataFrame' :
-        if type(automaton)  == dict :
-            return dict_to_table(automaton)
-        return automaton
-        
-    if type(automaton) == dict :
-        return automaton
-    return table_to_dict(automaton)
 
 
 #print(get_good_type(df_auto,'dict'))
@@ -164,7 +182,7 @@ def completing(automaton) :
 
 # print([phi_transition for _ in range(len(df_auto.columns)-2)])
 # print(range(len(df_auto.columns)-2))
-print(completing(automate))
+# print(completing(automate))
 
 
 
