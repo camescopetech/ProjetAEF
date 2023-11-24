@@ -24,7 +24,7 @@ df_auto = pd.DataFrame(index = ['0','1','2','3'], data = {
     'initial_state': [True,False,False,False],
     'final_states':[False,False,True,True]
 })
-#print(df_auto)
+print(df_auto)
 
 def dict_to_table(dico) :
     states = dico['states']
@@ -164,7 +164,7 @@ def completing(automaton) :
 
 # print([phi_transition for _ in range(len(df_auto.columns)-2)])
 # print(range(len(df_auto.columns)-2))
-print(completing(automate))
+# print(completing(automate))
 
 
 
