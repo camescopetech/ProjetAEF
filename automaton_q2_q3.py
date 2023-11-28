@@ -65,7 +65,7 @@ def completing(automaton) :
     df.replace(q1.null_transition,q1.phi_transition, inplace= True)
     return df
 
-print(is_complete(completing(q1.automate)))
+# print(is_complete(completing(q1.automate)))
 # print([phi_transition for _ in range(len(df_auto.columns)-2)])
 # print(range(len(df_auto.columns)-2))
 # print(completing(q1.automate))
