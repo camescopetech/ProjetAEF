@@ -139,19 +139,12 @@ def import_automaton(file_path) :
 #auto2 = import_automaton('test.txt')  
 # print(dict_to_table(auto2))
 
+def is_transition_valid(df, letter, state) :
+    if df[str(letter)].loc[str(state)] == null_transition :
+        return False
+    else : return df[str(letter)].loc[str(state)].split(', ')
+
+print(is_transition_valid(df_auto,'a','0'))
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-#back  else :
-            # raise TypeError(f'automaton_specified wrong type : dict or dataframe expected, got {type(automaton)}') 

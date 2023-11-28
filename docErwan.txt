@@ -48,7 +48,10 @@ Méthodes :
 
 dict_to_table(dict_automaton) : take an automaton under his dictionnary form and returns it under his dataframe form.
 table_to_dict(df_automaton) : take an automaton under his dataframe form and returns it under his dictionnary form.
+get_good_type(automaton, type ) : type = 'dataFrame' or type =dict. just in case, to be sure that the automaton entered is in the good type, this function return the automaton under the type passed.
 
 save_automaton(automaton,file_path) : take an automaton and a file_path then create a txt file containing the automaton. Only dict form supported as today.
 import_automaton(filepath) : read the file given and transform the value into a dictionnary (if it was one)
 is_word_recognized(automaton, word) : return a boolean according to if the word is recognized by the automaton or not
+is_complete(automaton) : return bool according to if the automaton is complete or not
+completing(automaton) : return the complete automaton (all missing transition goes to phi , a new state)
