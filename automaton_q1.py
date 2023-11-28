@@ -4,7 +4,7 @@ import pandas as pd
 null_transition = 'null'
 phi_transition = 'phi'
 
-automate = {
+automate_non_deter = {
     'alphabet': ['a','b'],
     'states' : ['0','1','2','3'],
     'initial_state' : '0',
@@ -24,15 +24,37 @@ automate = {
         ['3','3','a']
     ]
 }
+automate_deter = {
+    'alphabet': ['a','b'],
+    'states' : ['0','1','2','3'],
+    'initial_state' : '0',
+    'final_states' : ['2','3'],
+    'transitions': [
+        ['0','3','a'],
+        ['0','1','b'],
+
+        ['1','2','b'],
+        ['1','1','a'],
+
+        ['3','3','a']
+    ]
+}
 
 
-df_auto = pd.DataFrame(index = ['0','1','2','3'], data = {
+df_auto_non_deter = pd.DataFrame(index = ['0','1','2','3'], data = {
     'a': ['1, 3','2','2','3'],
     'b' : ['0','1, 2','2',null_transition],
     'initial_state': [True,False,False,False],
     'final_states':[False,False,True,True]
 })
-# print(df_auto)
+
+df_auto_deter = pd.DataFrame(index = ['0','1','2','3'], data = {
+    'a': ['3','1',null_transition,'3'],
+    'b' : ['1','2',null_transition,null_transition],
+    'initial_state': [True,False,False,False],
+    'final_states':[False,False,True,True]
+})
+# print(df_auto_deter)
 
 def dict_to_table(dico) : #ok
     states = dico['states']
@@ -144,7 +166,8 @@ def is_transition_valid(df, letter, state) :
         return False
     else : return df[str(letter)].loc[str(state)].split(', ')
 
-print(is_transition_valid(df_auto,'a','0'))
+# print(is_transition_valid(df_auto_deter,'a','0'))
+# print(df_auto_deter)
 
 
 
