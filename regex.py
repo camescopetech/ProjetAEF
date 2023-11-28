@@ -43,7 +43,7 @@ def find_regex(automaton) : #automaton must be determinist, stack of tuple(state
 
 
 def good_regex(regex) :
-    res = '('
+    res = '^('
     for reg in regex :
         letter_list = []
         letters = re.findall(r'\(.*?\)',reg)
@@ -70,9 +70,9 @@ def good_regex(regex) :
             i += 1      
         res+= '|'
 
-    return res[:-1] + ')'
+    return res[:-1] + ')$'
 
-print(find_regex(q1.automate_deter)) 
+# print(find_regex(q1.automate_deter)) 
 
 # print(good_regex(['^(a)(a)(*)$', '^(b)(b)(b)(*)$', '^(b)(a)(*)(b)$']))
 
@@ -93,24 +93,51 @@ def is_automate_equivalent(automaton1,automaton2) :
     regex2 = find_regex(dict2)
     if regex1 == regex2 :
         return True
-
-    n = 0
-    start = time.time()
-    while time.time() < start +10 :
-        exemple = generate_word(alphabet)
-        if bool(re.match(regex1, exemple)) != bool(re.match(regex2, exemple)) :
+    # print(regex1,regex2)
+    words1 = generate_words(automaton1,alphabet)
+    words2 = generate_words(automaton2,alphabet)
+    # print(words1 + words2)
+    for word in set(words1+words2) :
+        # print(word)
+        if bool(re.match(regex1, word)) != bool(re.match(regex2, word)) :
             return False
-        n+=1
-    return True    
+    return True  
 
     
-def generate_word(alphabet) :
-    max_len = 10 * len(alphabet)
-    new_word = ''
-    while random.random() > len(new_word) / max_len :
-        new_word += random.choice(alphabet)
-    return new_word    
+def generate_words(automaton,alphabet) : #random genretion not efficient and too long
+    df = q1.get_good_type(automaton, 'dataFrame')
+    words = []
+    stack =[(df[df.initial_state == True].index[0],'',df[df.initial_state == True].index[0])]
 
+    while stack :
+        state = stack[0][0]
+        precedent_state = stack[0][2]
+        word = stack[0][1]
+        suite = []
+        # print(precedent_state) 
+
+        for letter in alphabet :
+            next_state = q1.is_transition_valid(df, str(letter), str(state))
+            if next_state :
+                if next_state[0] == precedent_state :
+                    df.loc[precedent_state,word[-1]] = q1.null_transition
+                    # print(df)
+                    stack.append((next_state[0],word[:-1],state))
+                    for k in range(1,df.shape[0]+1) :
+                        stack.append((next_state[0],word+letter*k,state))
+                else :   
+                    suite += next_state[0]
+                    # print(word+letter)
+                    stack.append((next_state[0],word+letter,state))
+        if suite == [] :
+            # print(res)
+            words.append(word)
+        stack.pop(0)        
+    return words  
+   
+
+# print(generate_words(q1.df_auto_deter,['a','b']))
+# old
 # for _ in range(10):
 #     print(generate_word(['a','b','c','d']))    
 
