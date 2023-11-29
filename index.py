@@ -5,7 +5,6 @@ from tkinter.scrolledtext import ScrolledText
 import json
 #local import
 import verifFormat as v
-import autodraw as draw
 
 def openFile():
     file_path = filedialog.askopenfilename()
@@ -67,7 +66,12 @@ def formatVerif():
 
 def drawAutomate():
 
-    draw.afficher_automate(json.loads(v.conversion(textArea.get(1.0, tk.END))))
+    v.afficher_automate(json.loads(v.conversion(textArea.get(1.0, tk.END))))
+
+#QUESTION
+#2
+def question2():
+    print("hello")
 
 
 #---Main
@@ -91,12 +95,17 @@ terminal.grid(row=1, column=0)
 #Menu
 menu = Menu(root)
 menu_file = Menu(menu, tearoff=0)
+menu_function = Menu(menu, tearoff=0)
 
 #Menu file
 menu_file.add_command(label="Ouvrir", command=openFile)
 menu_file.add_command(label="Enregistrer", command=saveFileAs)
 menu_file.add_command(label="Sauvegarder", command=saveFile)
 menu.add_cascade(label="Fichier", menu=menu_file)
+
+#Menu projet
+menu_function.add_command(label="Reconnaissance", command=question2)
+menu.add_cascade(label="Fonction", menu=menu_function)
 
 #MenuFunction
 menu.add_command(label="Verification", command=formatVerif)
