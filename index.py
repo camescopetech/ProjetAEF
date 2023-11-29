@@ -6,6 +6,7 @@ import json
 #local import
 import verifFormat as v
 import automaton_q2_q3
+import automaton_q1
 
 #Function
 def insertTerminal(line):
@@ -68,6 +69,7 @@ def saveFile():
 def drawAutomate():
 
     v.afficher_automate(jsonLoads())
+    insertTerminal("En dev")
 
 #Verification
 def formatVerif():
@@ -116,9 +118,29 @@ def question3():
         else:
             insertTerminal("L'automate n'est pas complet")
 
+def question4():
+    
+    if formatVerifBool():
+
+        complet_automate = automaton_q2_q3.completing(jsonLoads())
+
+        complet_automate = automaton_q1.get_good_type(complet_automate, "dict")
+
+        complet_automate = json.dumps(complet_automate)
+        complet_automate.replace('[', '[\n').replace('],', '],\n')
 
 
     
+
+      
+        textArea.delete(1.0, tk.END)
+        textArea.insert(tk.END, complet_automate)
+
+def question5():
+    insertTerminal("q5 en travaux")  
+
+def question6():
+    insertTerminal("q6 en travaux") 
 
 #---Main
 projectName = "projet Python"
@@ -151,7 +173,10 @@ menu.add_cascade(label="Fichier", menu=menu_file)
 
 #Menu projet
 menu_function.add_command(label="Reconnaissance", command=question2)
-menu_function.add_command(label="Complet", command=question3)
+menu_function.add_command(label="Est complet", command=question3)
+menu_function.add_command(label="Rendre complet", command=question4)
+menu_function.add_command(label="Est déterministe", command=question5)
+menu_function.add_command(label="Rendre déterministe", command=question6)
 menu.add_cascade(label="Fonction", menu=menu_function)
 
 #MenuFunction
