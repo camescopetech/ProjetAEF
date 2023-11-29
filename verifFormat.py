@@ -1,5 +1,7 @@
 import json
 import ast
+import tkinter as tk
+import math
 
 def conversion(automate):
     try:
@@ -83,9 +85,6 @@ def isAutomateString(automate):
             return 9
 
     return 0
-
-import tkinter as tk
-import math
 
 def regrouper_transitions(automate):
     transitions_regroupees = {}
