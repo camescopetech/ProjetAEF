@@ -5,7 +5,36 @@ from tkinter.scrolledtext import ScrolledText
 import json
 #local import
 import verifFormat as v
+import automaton_q2_q3
 
+#Function
+def insertTerminal(line):
+    terminal.insert(tk.END, "> " + line + "\n")
+
+def formatVerifBool():
+
+    automate_verif = v.isAutomateString(textArea.get(1.0, tk.END))
+
+    if automate_verif != 0:
+        insertTerminal("ERROR: JSON is not correct")
+        return False
+    
+    return True
+
+def jsonLoads():
+    return json.loads(v.conversion(textArea.get(1.0, tk.END)))
+
+def insertPopUp(text):
+    # Créer une fenêtre principale
+    root = tk.Tk()
+    root.withdraw()  # Cacher la fenêtre principale
+
+    # Afficher la boîte de dialogue pour la saisie de l'utilisateur
+    user_input = tk.simpledialog.askstring("Entrée", text)
+
+    return user_input
+
+#FILE AND DRAW
 def openFile():
     file_path = filedialog.askopenfilename()
     if file_path:
@@ -36,9 +65,11 @@ def saveFile():
     else:
         saveFileAs()
 
-def formatTerminal(line):
-    return "> " + line + "\n"
+def drawAutomate():
 
+    v.afficher_automate(jsonLoads())
+
+#Verification
 def formatVerif():
 
     automate_verif = v.isAutomateString(textArea.get(1.0, tk.END))
@@ -61,18 +92,33 @@ def formatVerif():
     else:
         line =  "ERROR" + str(automate_verif) + ": " + listError[automate_verif]
     
-    terminal.insert(tk.END, formatTerminal(line))
+    insertTerminal(line)
     terminal.yview(tk.END)
 
-def drawAutomate():
-
-    v.afficher_automate(json.loads(v.conversion(textArea.get(1.0, tk.END))))
-
 #QUESTION
-#2
 def question2():
-    print("hello")
 
+    if formatVerifBool():
+       
+        word = insertPopUp("Entrez un mot:")
+
+        if automaton_q2_q3.is_word_recognized(jsonLoads(),word):
+            insertTerminal(word + " est reconnu par l'AEF")
+        else:
+            insertTerminal(word + " n'est reconnu par l'AEF")
+        
+def question3():
+
+    if formatVerifBool():
+
+        if automaton_q2_q3.is_complete(jsonLoads()):
+            insertTerminal("L'automate est complet")
+        else:
+            insertTerminal("L'automate n'est pas complet")
+
+
+
+    
 
 #---Main
 projectName = "projet Python"
@@ -105,6 +151,7 @@ menu.add_cascade(label="Fichier", menu=menu_file)
 
 #Menu projet
 menu_function.add_command(label="Reconnaissance", command=question2)
+menu_function.add_command(label="Complet", command=question3)
 menu.add_cascade(label="Fonction", menu=menu_function)
 
 #MenuFunction

@@ -14,6 +14,7 @@ def is_word_recognized_old(automaton,word):
     return df.final_states.loc[str(current_state)]
 
 def is_word_recognized(automaton, word, state = None, rec = []) : # a opti/nettoyer/rendre beau
+    
     df = q1.get_good_type(automaton,'dataFrame')
     if state == None :
         state = list(df[df.initial_state == True].index)[0]
