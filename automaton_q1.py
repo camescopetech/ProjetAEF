@@ -171,15 +171,3 @@ def is_transition_valid(df, letter, state) :
 
 
 
-
-
-
-
-
-
-
-
-
-
-#back  else :
-            # raise TypeError(f'automaton_specified wrong type : dict or dataframe expected, got {type(automaton)}') 
