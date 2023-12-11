@@ -27,4 +27,4 @@ def is_automaton_deterministic(automaton):
 
 
         
-print(is_automaton_deterministic(automate))
+#print(is_automaton_deterministic(automate))
