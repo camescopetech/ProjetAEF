@@ -134,7 +134,7 @@ def afficher_automate(automate):
         est_etat_final = state in automate['final_states']
 
         # Dessiner cercle pour l'état
-        cercle = canevas.create_oval(x - 20, y - 20, x + 20, y + 20, outline="black", fill="white")
+        canevas.create_oval(x - 20, y - 20, x + 20, y + 20, outline="black", fill="white")
 
         # Ajouter indicateur pour l'état initial (triangle)
         if est_etat_initial:
@@ -164,16 +164,14 @@ def afficher_automate(automate):
             transition = transGroup[0]
 
             start_state, end_state, symbol = transition
-            x1, y1 = etats_circles[start_state]
-            x2, y2 = etats_circles[end_state]
+            x, y = etats_circles[start_state]
 
-            arrow_length = 30  # Ajustez cette valeur pour définir la longueur de la boucle
-            arrow_x = x2 + arrow_length * math.cos(math.pi / 4)  # Ajustez l'angle de la boucle selon votre préférence
-            arrow_y = y2 + arrow_length * math.sin(math.pi / 4)
+            rayonArrow = 10
+            xPointeArrow = x + 2*(rayon - rayonArrow)
+            canevas.create_text(x + 2*rayon + 10 , y , text=symbol, fill='blue')
+            canevas.create_oval(xPointeArrow, y - rayonArrow, x + 2*rayon, y + rayonArrow, outline="black")
+            canevas.create_polygon(xPointeArrow, y, xPointeArrow - 5, y + 5, xPointeArrow + 5, y + 5, fill="black")
 
-            # Dessiner une boucle avec une flèche à l'extrémité
-            canevas.create_line(x2, y2, arrow_x, arrow_y, smooth=tk.TRUE, arrow=tk.LAST)
-            canevas.create_text((x2 + arrow_x) / 2, (y2 + arrow_y) / 2 - 10, text=symbol, fill='blue')   
         else:
 
             lenGroup = len(transGroup)
