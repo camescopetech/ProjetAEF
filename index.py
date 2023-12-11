@@ -7,6 +7,8 @@ import json
 import verifFormat as v
 import automaton_q2_q3
 import automaton_q1
+import is_automaton_deterministic
+import to_automaton_deterministic
 
 #Function
 def insertTerminal(line):
@@ -34,6 +36,17 @@ def insertPopUp(text):
     user_input = tk.simpledialog.askstring("Entrée", text)
 
     return user_input
+
+def addJsonOnTextArea(automate):
+  
+    automate = json.dumps(automate)
+
+    automate = automate.replace('{','{\n').replace('}','\n}')
+    automate = automate.replace('],','],\n')
+    automate = automate.replace('[[','[\n [').replace(']]',']\n ]')
+
+    textArea.delete(1.0, tk.END)
+    textArea.insert(tk.END, automate)
 
 #FILE AND DRAW
 def openFile():
@@ -122,24 +135,32 @@ def question4():
     
     if formatVerifBool():
 
-        complet_automate = automaton_q2_q3.completing(jsonLoads())
+        automate = automaton_q2_q3.completing(jsonLoads())
+        automate = automaton_q1.get_good_type(automate, "dict")
 
-        complet_automate = automaton_q1.get_good_type(complet_automate, "dict")
-
-        complet_automate = json.dumps(complet_automate)#, indent=2)
+        addJsonOnTextArea(automate)
         insertTerminal("Automate completé")
-        complet_automate = complet_automate.replace('{','{\n').replace('}','\n}')
-        complet_automate = complet_automate.replace('],','],\n')
-        complet_automate = complet_automate.replace('[[','[\n [').replace(']]',']\n ]')
-
-        textArea.delete(1.0, tk.END)
-        textArea.insert(tk.END, complet_automate)
 
 def question5():
-    insertTerminal("q5 en travaux")  
+    
+    if formatVerifBool():
+
+        if is_automaton_deterministic.is_automaton_deterministic(jsonLoads()):
+            insertTerminal("L'automate est deterministe")
+        else:
+            insertTerminal("L'automate n'est pas deterministe")
 
 def question6():
-    insertTerminal("q6 en travaux") 
+    
+    if formatVerifBool():
+
+        #automate = automaton_q1.get_good_type(jsonLoads, "dataFrame")
+        automate = to_automaton_deterministic.to_automaton_deterministic(jsonLoads())
+        automate = automaton_q1.get_good_type(automate, "dict")
+
+        addJsonOnTextArea(automate)
+        insertTerminal("Automate à été rendu deterministe")
+
 
 #---Main
 projectName = "projet Python"
