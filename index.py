@@ -126,13 +126,12 @@ def question4():
 
         complet_automate = automaton_q1.get_good_type(complet_automate, "dict")
 
-        complet_automate = json.dumps(complet_automate)
-        complet_automate.replace('[', '[\n').replace('],', '],\n')
+        complet_automate = json.dumps(complet_automate)#, indent=2)
+        insertTerminal("Automate completé")
+        complet_automate = complet_automate.replace('{','{\n').replace('}','\n}')
+        complet_automate = complet_automate.replace('],','],\n')
+        complet_automate = complet_automate.replace('[[','[\n [').replace(']]',']\n ]')
 
-
-    
-
-      
         textArea.delete(1.0, tk.END)
         textArea.insert(tk.END, complet_automate)
 
