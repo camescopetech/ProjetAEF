@@ -42,4 +42,4 @@ def to_automaton_deterministic(afn):
     
     return afd
 
-print(to_automaton_deterministic(automate))
+#print(to_automaton_deterministic(automate))
