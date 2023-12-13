@@ -73,11 +73,7 @@ def good_regex(regex) :
 
     return res[:-1] + ')$'
 
-<<<<<<< HEAD
 # print(find_regex(test.auto1)) 
-=======
-# print(find_regex(q1.automate_deter)) 
->>>>>>> e0cdd501508251197d4cb62f0d68f6f019c1e7fb
 
 # print(good_regex(['^(a)(a)(*)$', '^(b)(b)(b)(*)$', '^(b)(a)(*)(b)$']))
 
@@ -107,7 +103,6 @@ def is_automate_equivalent(automaton1,automaton2) :
         if bool(re.match(regex1, word)) != bool(re.match(regex2, word)) :
             return False
     return True  
-<<<<<<< HEAD
     
 def generate_words(automaton,alphabet) : #random genretion not efficient and too long
     df = q1.get_good_type(automaton, 'dataFrame')
@@ -338,8 +333,6 @@ def good_regex2(regex) :
 # print(good_regex2(find_regex2(test.auto1)))
 
 
-=======
-
     
 def generate_words(automaton,alphabet) : #random genretion not efficient and too long
     df = q1.get_good_type(automaton, 'dataFrame')
@@ -373,14 +366,12 @@ def generate_words(automaton,alphabet) : #random genretion not efficient and too
     return words  
    
 
->>>>>>> e0cdd501508251197d4cb62f0d68f6f019c1e7fb
 # print(generate_words(q1.df_auto_deter,['a','b']))
 # old
 # for _ in range(10):
 #     print(generate_word(['a','b','c','d']))    
 
 
-<<<<<<< HEAD
 # print(is_automate_equivalent(q1.automate_deter,q1.df_auto_deter))
 
 
@@ -423,15 +414,21 @@ def find_regex_4(automaton) :
         # Il faut écrire (1a (2a3(...)*2b)* 1b)*
         # Potentiel introduction du ? pour des cycles démarrant du même état
         # On met au début de la liste à chaque fois qu'on trouve une boucle, qu'on ajoute en entiers directement pour conserver l'ordre 
-        stack = [('q1','start')]
+        stack = [('q1','start',True)]
         for i in range(len(states_full)) :
-            stack.append((states_full[i],letters_full[i]))
-        
+            stack.append((states_full[i],letters_full[i],True))
+        #maitenant : il faut réinitialiser les cycles pour qu'il puissent être pris à chaque étape de l'avancement vers le mots final non bouclé    
+        # intial_stack = stack.copy()
+
         while stack :
 
             # print('stack', stack)
             letter = stack[0][1]
             current_state = stack[0][0]
+            is_default_path = stack[0][2]
+            # print(is_default_path)
+            if is_default_path :
+                current_cycles = []
 
             # print('states',states, 'letters', letters)
             
@@ -452,14 +449,14 @@ def find_regex_4(automaton) :
                         for i in range(len(cycle[0])):
                              # print((debut_cycle+i)%len(cycle))
                              # print(len(cycle))
-                            stack.insert(i,(cycle[0][(debut_cycle+i)%len(cycle[0])],cycle[1][(debut_cycle+i)%len(cycle[0])]))
+                            stack.insert(i,(cycle[0][(debut_cycle+i)%len(cycle[0])],cycle[1][(debut_cycle+i)%len(cycle[0])],False))
                             # print('la', cycle[1][(debut_cycle+i)%len(cycle[0])], cycle)
                             # temp_word.append(cycle[1][(debut_cycle+i)%len(cycle[1])])
 
                         #idée : a la fin de la boucle for, ajoute * + taille de la boucle + 1e, 2e, 3e... boucle. A la restitution, on regarde si * dans les taille de boucle caracteres precedant. Si oui boucle imbriqué
                         # Il faut impérativement traité la boucle la plus imbriquée en premier
 
-                        stack.insert(len(cycle[0]),('False',['*',len(cycle[0]) ,len(current_cycles)] ))
+                        stack.insert(len(cycle[0]),('False',['*',len(cycle[0]) ,len(current_cycles)], False))
 
                         # word.append('('+''.join(temp_word)+')*')
                 # if not temp_word :
@@ -469,9 +466,9 @@ def find_regex_4(automaton) :
             word.append(letter) 
 
         res.append(word)
-        break #debug line
-    print(star(res))
-    return res    
+        # break #debug line
+    # print(star(res))
+    return star(res)    
 
 def star(result) :
     # remplacer les cycles par un el de la liste. Un el meme pour plusieurs cycles imbriquées. On repère un cycle par un el qui est une liste
@@ -498,7 +495,7 @@ def star(result) :
                 temp_res.append(current_boucle)
             else : 
                 temp_res.append(liste[i]) 
-        print('temp_res', temp_res)
+        # print('temp_res', temp_res)
         # 2 boucles d'afilée dans une seule boucle
         good_res = []
         for  i in range(len(temp_res)-1) :
@@ -509,7 +506,7 @@ def star(result) :
                 good_res.append(temp_res[i])
         if not(temp_res[i+1][0] =='(' and temp_res[i][0] =='(') :
             good_res.append(temp_res[i+1])  
-        res.append(good_res)
+        res.append(good_res[1:])
         # print('res', res,'good_res',good_res)
     return(res)               
 
@@ -546,7 +543,7 @@ def find_cycle(automaton) :
         stack.pop(0)            
     return cycles_found
 
-print(find_cycle(test.auto8))  
+# print(find_cycle(test.auto8))  
 
 def end_path(df,state) : #doit trouver les moyens de finir sans boucle, retourne une liste où chaque element et la liste des lettres pour finir
 
@@ -572,12 +569,71 @@ def end_path(df,state) : #doit trouver les moyens de finir sans boucle, retourne
         stack.pop(0)        
     return  res          
 
-print(end_path(q1.get_good_type(test.auto1,'dataFrame'),'0'))
 
-print(find_regex_4(test.auto9))
+
+
+def refactor2(results) :
+    # print(results)
+    #utiliser commonprefix.Passer dans la liste et trouver le mots avec le plus grand prefixe commun.
+    # Dépiler le mot des mots à comprimer
+    # Le mot à ajouter est la liste commune + [(fin_mot1|fin_mot2)]
+    # On garde le nouveau pour le comparer à tous ceux qui commencent pareil. 
+    # On l'ajoute à une liste finale seulement quand commonprefix retourne [] avec tous les mots restants.
+    liste = results.copy()
+    res = []
+    while liste :
+        # print(res)
+        word = liste[0]
+        prefix = []
+        new_word = []
+        temp = 0
+        # print(word)
+        # for el in liste :
+        #     print('el', el)
+        #     if type(el[0]) == list : el = el[0]
+        for other_word in liste[1:] :
+            # print('word',word,'other_word', other_word,'liste', liste)
+        
+            if len(os.path.commonprefix([word,other_word])) > len(prefix) :
+                # print(prefix)
+                prefix = os.path.commonprefix([word,other_word])
+                temp = liste.index(other_word)
+        # print(prefix,'ici')        
+        if prefix :
+            if not word[len(prefix):] : 
+                print(word[len(prefix):])
+                if len(liste[temp][len(prefix):]) == 1 : new_word = prefix+ [f'{"".join(liste[temp][len(prefix):])}?']
+                else :new_word = prefix+ [f'({"".join(liste[temp][len(prefix):])})?']
+            elif not liste[temp][len(prefix):] : 
+                if len(word[len(prefix):]) == 1 : new_word = prefix + [f'{"".join(word[len(prefix):])}?']
+                else : new_word = prefix + [f'({"".join(word[len(prefix):])})?']
+            else :       
+                new_word = prefix + [f'({"".join(word[len(prefix):])}|{"".join(liste[temp][len(prefix):])})'] # doit etre liste est str actuellement
+            # print('new_word :',new_word)
+            liste.pop(temp)
+            liste[0] = new_word
+            # print('liste',liste)
+        else :
+            # print('word',word)
+            
+            res+= word
+            # print('res', res)      
+            # liste.pop(temp) 
+            liste.pop(0) 
+    finished = '^' + ''.join(res) + '$'       
+    return finished
+
+
+
+# print(end_path(q1.get_good_type(test.auto1,'dataFrame'),'0'))
+
+# print(find_regex_4(test.auto9))
 #pour auto 8 le meilleur résultat est ^(a(cba)*bcd)*(abc|aba|acd)$   (on peut un peu plus factoriser mais tres ok)
 #auto 9 : (a(cdd)*(bad)*cd)*(cba)*(abc?|abd|acd)
+print(refactor2(find_regex_4(test.auto9)))
 
-          
+# print(compile(refactor2(find_regex_4(test.auto9))))         
+
+
 
 
