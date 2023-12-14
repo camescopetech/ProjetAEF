@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 import json
 #local import
-import verifFormat as v
+import interface as v
 import automaton_q2_q3
 import automaton_q1
 import is_automaton_deterministic
