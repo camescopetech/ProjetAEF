@@ -1,6 +1,6 @@
 import pandas as pd
 from automaton_q1 import *
-from debut import * 
+#from debut import * 
 
 def is_automaton_deterministic(automaton):
     """ Verify if the automaton is deterministic. Return why if isn't else return nothing """
@@ -12,7 +12,7 @@ def is_automaton_deterministic(automaton):
         raise TypeError(f'automaton_specified wron type : dict or dataframe expected, got {type(automaton)}')    
     initiaux = dic['initial_state']
     if len(dic['initial_state']) != 1:
-        return "The automaton hasn't only one initial state"
+        return (False,"The automaton hasn't only one initial state")
     stats = dic['states']
     transis = dic['transitions']
     for stat in stats :
@@ -21,10 +21,11 @@ def is_automaton_deterministic(automaton):
             if stat == transi[0] :
                 if transi[2] in listTransi :
                     result = False
-                    return f"The state {stat} can follow more than one time the transition {transi[2]}"      
+                    return (False,f"The state {stat} can follow more than one time the transition {transi[2]}") 
                     break    
                 else:
                     listTransi.append(transi[2])
+    return (True,"The automaton is deterministic")
                
 def to_automaton_deterministic(afn):
     afd = {
@@ -68,7 +69,7 @@ def to_automaton_deterministic(afn):
     
     return afd
 
-#print(to_automaton_deterministic(automate))
+#print(to_automaton_deterministic(automate_non_deter))
 
         
-#print(is_automaton_deterministic(automate))
+#print(is_automaton_deterministic(automate_deter))
