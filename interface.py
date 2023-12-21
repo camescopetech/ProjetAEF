@@ -3,6 +3,11 @@ import ast
 import tkinter as tk
 import math
 
+"""
+Convert the automate into a string
+@param: json automate
+@return: String
+"""
 def conversion(automate):
     try:
 
@@ -13,13 +18,21 @@ def conversion(automate):
     except (SyntaxError, ValueError) as e:
         #print(f"Erreur lors de la conversion : {e}")
         return None
-    
+"""
+Check if there are any occurrences in the list of the automate
+@param: json automate, String key
+@return: Boolean
+"""   
 def isNoneOccurenceList(automate,key):
 
     list = automate.get(key, [])
 
     return len(list) == len(set(list))
-
+"""
+Checks if the automaton in string has the right format
+@param: json automate
+@return: int Corresponds to the success or error of the automaton in the form of a string
+"""
 def isAutomateString(automate):
 
     automate = conversion(automate)
@@ -85,43 +98,50 @@ def isAutomateString(automate):
             return 9
 
     return 0
-
+"""
+Groups the transitions
+@param: json automate
+@result: list of the transition
+"""
 def regrouper_transitions(automate):
     transitions_regroupees = {}
 
     for transition in automate["transitions"]:
         etat_depart, etat_arrivee, symbole = transition
 
-        # Créer une clé triée pour chaque paire d'états
+        #Créer une clé triée pour chaque paire d'états
         cle = tuple(sorted([etat_depart, etat_arrivee]))
 
-        # Vérifier si la clé existe déjà dans le dictionnaire
+        #Vérifier si la clé existe déjà dans le dictionnaire
         if cle in transitions_regroupees:
             transitions_regroupees[cle].append([etat_depart, etat_arrivee, symbole])
         else:
             transitions_regroupees[cle] = [[etat_depart, etat_arrivee, symbole]]
 
-    # Convertir le résultat en une liste de listes de transitions
+    #Convertir le résultat en une liste de listes de transitions
     resultat = [transitions for transitions in transitions_regroupees.values()]
 
     return resultat
-
-def afficher_automate(automate):
+"""
+Draw the automate into another window
+@param: json automate
+"""
+def drawAutomate(automate):
     fenetre = tk.Tk()
     fenetre.title("Automate Visuel")
 
     canevas = tk.Canvas(fenetre, width=500, height=300, bg="white")
     canevas.pack()
 
-    # Calculer le centre du cercle
+    #Center of window 
     centre_x = 250
     centre_y = 150
 
-    # Inverser l'ordre des états pour commencer à droite
+    #Reverse the order of states to start on the right 
     etats_reverse = list(reversed(automate['states']))
 
-    # Dessiner les états en cercle
-    etats_circles = {}  # Dictionnaire pour stocker les cercles des états
+    #Draw the states in a circle 
+    etats_circles = {}  
     nombre_etats = len(etats_reverse)
     rayon = 80
 
@@ -133,32 +153,32 @@ def afficher_automate(automate):
         est_etat_initial = state == automate['initial_state']
         est_etat_final = state in automate['final_states']
 
-        # Dessiner cercle pour l'état
+        #Draw circle for state
         canevas.create_oval(x - 20, y - 20, x + 20, y + 20, outline="black", fill="white")
 
-        # Ajouter indicateur pour l'état initial (triangle)
+        #Adds indicator for initial state (triangle) 
         if est_etat_initial:
-            # Ajuster les coordonnées pour placer le triangle à droite du cercle
+            #Adjust the coordinates to place the triangle to the right of the circle
             canevas.create_polygon(x - 20, y, x - 30, y + 10, x - 30, y - 10, fill="black")
 
-        # Ajouter indicateur pour l'état final (cercle)
+        #Add indicator for final state (circle)
         if est_etat_final:
             canevas.create_oval(x - 15, y - 15, x + 15, y + 15, outline="black")
 
-        # Ajouter texte pour l'état
+        #Add text for status 
         canevas.create_text(x, y, text=state)
 
-        etats_circles[state] = (x, y)  # Stocker les coordonnées du cercle dans le dictionnaire
+        #Stores circle coordinates in dictionary 
+        etats_circles[state] = (x, y)  
 
-    # Dessiner les transitions
-    
+    #Draw the transitions 
     rayon = 20
     transGroupList = regrouper_transitions(automate)
 
     for transGroup in transGroupList:
 
         
-        # Si la transition pointe vers le même état, dessiner une boucle
+        #If the transition points to the same state, draw a loop 
         if transGroup[0][0] == transGroup[0][1]:
 
             transition = transGroup[0]
@@ -192,7 +212,8 @@ def afficher_automate(automate):
                 end_x_adjusted = x2 - rayon * math.cos(math.atan2(y2 - control_y, x2 - control_x))
                 end_y_adjusted = y2 - rayon * math.sin(math.atan2(y2 - control_y, x2 - control_x))
 
-                canevas.create_line(start_x_adjusted, start_y_adjusted, end_x_adjusted, end_y_adjusted, arrow=tk.LAST)  # Flèche entre les cercles
+                #Arrow between circles
+                canevas.create_line(start_x_adjusted, start_y_adjusted, end_x_adjusted, end_y_adjusted, arrow=tk.LAST) 
                 canevas.create_text((x1 + x2) / 2, (y1 + y2) / 2 - 10, text=symbol, fill='blue')
 
                 transGroup = transGroup[1:]
@@ -205,7 +226,7 @@ def afficher_automate(automate):
                 x1, y1 = etats_circles[start_state]
                 x2, y2 = etats_circles[end_state]
         
-                # Dessiner une flèche du cercle du premier état vers le cercle du deuxième état
+                #Draw an arrow from the circle of the first state to the circle of the second state
                 if clock == 0:
                     
                     control_x = (x1 + x2) / 2
@@ -233,7 +254,7 @@ def afficher_automate(automate):
                     clock = 0
                     decalage += 20
 
-                # Ajuster la position de départ et d'arrêt pour que les flèches démarrent et finissent au niveau du cercle
+                #Adjust the start and stop position so that the arrows start and end at the circle 
                
                 start_x_adjusted = x1 + rayon * math.cos(math.atan2(control_y - y1, control_x - x1))
                 start_y_adjusted = y1 + rayon * math.sin(math.atan2(control_y - y1, control_x - x1))
@@ -242,8 +263,4 @@ def afficher_automate(automate):
 
                 canevas.create_line(start_x_adjusted, start_y_adjusted, control_x, control_y, end_x_adjusted, end_y_adjusted, smooth=tk.TRUE, arrow=tk.LAST)
 
-
-
     fenetre.mainloop()
-
-
