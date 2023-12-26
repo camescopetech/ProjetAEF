@@ -67,9 +67,10 @@ def complem_automaton(automaton):
         'final_states': [state for state in automaton['states'] if state not in automaton['final_states']],
         'transitions': automaton['transitions']
     }
-    df = pd.DataFrame.from_dict(complem_dict, orient='index')
+    #df = pd.DataFrame.from_dict(complem_dict, orient='index')
+    #return df
 
-    return df
+    return complem_dict
 
 
 
@@ -96,10 +97,9 @@ def miroir_automaton(automaton):
         # Inverser la direction des transitions
     }
 
-    df = pd.DataFrame.from_dict(miroir_dict, orient='index')
-
-    return df
-
+    #df = pd.DataFrame.from_dict(miroir_dict, orient='index')
+    #return df
+    return miroir_dict
 
 # df_automate = q1.dict_to_table(automate)
 
@@ -178,10 +178,10 @@ def produit_aefs(automate1, automate2):
     # # Supprimer les transitions dupliquees
     # prodAutom['transitions'] = list(set(tuple(t) for t in prodAutom['transitions']))
                 
-    df = pd.DataFrame.from_dict(prodAutom, orient='index').transpose()
-    
-
-    return df
+    #df = pd.DataFrame.from_dict(prodAutom, orient='index').transpose()
+    #return df
+                    
+    return prodAutom
 
 
 
@@ -221,9 +221,10 @@ def concatAEF(automate1,automate2):
         concatAutom['transitions'].append(new_transition)   
 
 
-    df = pd.DataFrame.from_dict(concatAutom, orient='index').transpose()
-    
-    return df
+    #df = pd.DataFrame.from_dict(concatAutom, orient='index').transpose()
+    #return df
+        
+    return concatAutom
 
 
 
