@@ -8,6 +8,7 @@ import interface as v
 import automaton_q2_q3
 import automaton_q1
 import determinist
+import automaton_q7
 
 #Function
 """
@@ -51,7 +52,7 @@ def getTextAreaJSON():
         full_text = full_text[:start_index] + full_text[end_index + len(end_comment):]
         start_index = full_text.find(start_comment)
 
-    print(full_text)
+    #print(full_text)
 
     return full_text
 """
@@ -89,6 +90,33 @@ Load the json from a string
 def jsonLoads():
     return json.loads(v.conversion(getTextAreaJSON()))
 """
+Load 2 json from a string
+@return: [json]
+"""
+def  json2loadsAndVerif():
+
+    text = getTextAreaJSON()
+    i = text.find('}\n{')
+
+    if  i != -1:
+
+        json1 = text[:i+1]
+        json2 = text[i+2:]
+
+        if v.isAutomateString(json1) != 0:
+            insertTerminal("ERROR: 1st JSON is not correct")
+            json1 = ""
+            
+        if v.isAutomateString(json2) != 0:
+            insertTerminal("ERROR: 2nd JSON is not correct")   
+            json2 = ""
+        
+        return [json1,json2]
+
+    else:
+        insertTerminal("ERREUR: Les deux JSON doivent être separé par un saut de ligne")
+        return ['','']
+"""
 Create an insert pop up
 @param: String text to write on the pop up
 @return: String the user input
@@ -114,11 +142,12 @@ def addJsonOnTextArea(automate):
     automate = automate.replace('],','],\n')
     automate = automate.replace('[[','[\n [').replace(']]',']\n ]')
 
-    automate += "/*" + getTextAreaComment() + "*/"
+    comment = getTextAreaComment()
+    if comment != "":
+        automate += "\n/*" + comment + "*/"
 
     textArea.delete(1.0, tk.END)
     textArea.insert(tk.END, automate)
-
 #FILE AND DRAW
 """
 Open a file and load the content on the text area
@@ -129,6 +158,15 @@ def openFile():
         with open(file_path, 'r') as file:
             content = file.read()
             textArea.delete(1.0, tk.END)
+            textArea.insert(tk.END, content)
+"""
+Open a file and add the content on the text area
+"""
+def addFile():
+    file_path = filedialog.askopenfilename()
+    if file_path:
+        with open(file_path, 'r') as file:
+            content = file.read()
             textArea.insert(tk.END, content)
 """
 Save the text area on a new file
@@ -162,7 +200,6 @@ Check if the json format is correct
 def drawAutomate():
 
     v.drawAutomate(jsonLoads())
-    insertTerminal("En dev")
 
 #Verification
 """
@@ -177,7 +214,7 @@ def formatVerif():
         "Not a json",
         "The keys are false",
         "Transition must have three elements",
-        "Initial_state' must have one element",
+        "Initial_state must have one element",
         "Element in 'alphabet', 'states' and 'final_states' must have any occurrence",
         "Alphabet is not correct",
         "States is not correct",
@@ -251,43 +288,73 @@ def question6():
     if formatVerifBool():
 
         #automate = automaton_q1.get_good_type(jsonLoads, "dataFrame")
-        automate = determinist.to_automaton_deterministic(jsonLoads())
+        automate = determinist.to_automaton_deterministic(jsonLoads())      
         automate = automaton_q1.get_good_type(automate, "dict")
-
-        addJsonOnTextArea(automate)
+        
+        addJsonOnTextArea(automate)     
         insertTerminal("Automate à été rendu deterministe")
+       
 """
 Function which links the function of the question 7.1 to the HMI
 """
 def question71():
     
     if formatVerifBool():
-        insertTerminal("Question 71 en travaux")
+
+        automate = automaton_q7.complem_automaton(jsonLoads())
+        automate = automaton_q1.get_good_type(automate, "dict")
+
+        addJsonOnTextArea(automate)
+        insertTerminal("Automate complementé")
 """
 Function which links the function of the question 7.2 to the HMI
 """
 def question72():
 
     if formatVerifBool():
-        insertTerminal("Question 72 en travaux")
+        
+        automate = automaton_q7.miroir_automaton(jsonLoads())
+        automate = automaton_q1.get_good_type(automate, "dict")
+
+        addJsonOnTextArea(automate)
+        insertTerminal("Automate rendu miroir")
 """
 Function which links the function of the question 7.3 to the HMI
 """
 def question73():
 
-    #Atravailler
+    jsonTab = json2loadsAndVerif()
+    json1 = jsonTab[0]
+    json2 = jsonTab[1]
 
-    if formatVerifBool():
-        insertTerminal("Question 73 en travaux")
+    if json1 != '' and json2 != '':
+        json1 = json.loads(v.conversion(json1))
+        json2 = json.loads(v.conversion(json2))
+
+        automate = automaton_q7.produit_aefs(json1,json2)
+        automate = automaton_q1.get_good_type(automate, "dict")
+
+        addJsonOnTextArea(automate)
+        insertTerminal("Produits effectué")
+
 """
 Function which links the function of the question 7.4 to the HMI
 """
 def question74():
 
-    #Atravailler
+    jsonTab = json2loadsAndVerif()
+    json1 = jsonTab[0]
+    json2 = jsonTab[1]
 
-    if formatVerifBool():
-        insertTerminal("Question 74 en travaux")   
+    if json1 != '' and json2 != '':
+        json1 = json.loads(v.conversion(json1))
+        json2 = json.loads(v.conversion(json2))
+
+        automate = automaton_q7.concatAEF(json1,json2)
+        automate = automaton_q1.get_good_type(automate, "dict")
+
+        addJsonOnTextArea(automate)
+        insertTerminal("Produits effectué")
 """
 Function which links the function of the question 8 to the HMI
 """
@@ -352,6 +419,7 @@ menu_function = Menu(menu, tearoff=0)
 
 #Menu file
 menu_file.add_command(label="Ouvrir", command=openFile)
+menu_file.add_command(label="Ajouter", command=addFile)
 menu_file.add_command(label="Enregistrer", command=saveFileAs)
 menu_file.add_command(label="Sauvegarder", command=saveFile)
 menu.add_cascade(label="Fichier", menu=menu_file)
