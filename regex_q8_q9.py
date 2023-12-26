@@ -90,15 +90,11 @@ def find_regex(automaton) :
 
 
 
-def find_cycle(automaton) :
-    # pour chaque état, dresser la liste des transitions possibles
-    # si l'on arrive à un état précédemment croisé,ajouté dans une liste des loops une liste contenant les etats de la loop (et mots ? )   
+def find_cycle(automaton) :   
     df = q1.get_good_type(automaton, 'dataFrame')
     alphabet = list(df.columns)[:-2]
     cycles_found = []
     sorted_cycles = []
-
-
     stack =[(df[df.initial_state == True].index[0],[],[])] #the stack contains a tuple of 3 elements : the current state, the ordered list of already visited states and the letters corresponding to this pathing.
 
     while stack :
@@ -190,7 +186,6 @@ def star(result) :
 
 
 def refactor(results) :
-    #utiliser commonprefix.Passer dans la liste et trouver le mots avec le plus grand prefixe commun.
     # Dépiler le mot des mots à comprimer
     # Le mot à ajouter est la liste commune + [(fin_mot1|fin_mot2)]
     # On garde le nouveau pour le comparer à tous ceux qui commencent pareil. 
@@ -203,7 +198,7 @@ def refactor(results) :
         new_word = []
         temp = 0
         for other_word in liste[1:] :
-        
+            # use commonprefix to get the element (and if there is one) who can be factorized the most with the current element
             if len(os.path.commonprefix([word,other_word])) > len(prefix) :
                 prefix = os.path.commonprefix([word,other_word])
                 temp = liste.index(other_word)      
