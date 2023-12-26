@@ -5,6 +5,36 @@ def equivalent_states(state1, state2, equivalence_classes):
             return True
     return False
 
+def remove_unreachable_states(automaton):
+    # Extract the initial state and transitions from the automaton
+    initial_state = automaton['initial_state']
+    transitions = automaton['transitions']
+
+    # Initialize a set to store reachable states
+    reachable = set([initial_state])
+
+    # Use a stack to perform depth-first search to find reachable states
+    stack = [initial_state]
+
+    while stack:
+        # Pop a state from the stack
+        current_state = stack.pop()
+
+        # Iterate through transitions to find states reachable from the current state
+        for transition in transitions:
+            if transition[0] == current_state:
+                next_state = transition[2]
+                # If the next state is not already reachable, add it to the set and the stack
+                if next_state not in reachable:
+                    reachable.add(next_state)
+                    stack.append(next_state)
+
+    # Filter out transitions that involve unreachable states
+    new_transitions = [transition for transition in transitions if transition[0] in reachable and transition[2] in reachable]
+
+    # Update the automaton with reachable states and filtered transitions
+    automaton['states'] = list(reachable)
+    automaton['transitions'] = new_transitions
 
 # Main function for minimizing the DFA
 def minimize(automaton):
