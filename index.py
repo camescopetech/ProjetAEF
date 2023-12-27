@@ -9,6 +9,8 @@ import automaton_q2_q3
 import automaton_q1
 import determinist
 import automaton_q7
+import regex_q8_q9
+import minimal_q12
 
 #Function
 """
@@ -136,12 +138,16 @@ Convert automaton to string and put it in text area with comment
 """
 def addJsonOnTextArea(automate):
   
+    automate = automaton_q1.get_good_type(automate, "dict")
+   
     automate = json.dumps(automate)
 
     automate = automate.replace('{','{\n').replace('}','\n}')
     automate = automate.replace('],','],\n')
     automate = automate.replace('[[','[\n [').replace(']]',']\n ]')
-
+    automate = automate.replace(', "final_states"',',\n "final_states"')
+    automate = automate.replace(', "transitions"',',\n "transitions"')
+    
     comment = getTextAreaComment()
     if comment != "":
         automate += "\n/*" + comment + "*/"
@@ -199,7 +205,8 @@ Check if the json format is correct
 """
 def drawAutomate():
 
-    v.drawAutomate(jsonLoads())
+    if formatVerifBool():
+        v.drawAutomate(jsonLoads())
 
 #Verification
 """
@@ -218,7 +225,7 @@ def formatVerif():
         "Element in 'alphabet', 'states' and 'final_states' must have any occurrence",
         "Alphabet is not correct",
         "States is not correct",
-        "States must contain initial_state",
+        "States must contain initial_state AND initial_state must have one element",
         "States must contain final_states"
     ]
 
@@ -263,7 +270,6 @@ def question4():
     if formatVerifBool():
 
         automate = automaton_q2_q3.completing(jsonLoads())
-        automate = automaton_q1.get_good_type(automate, "dict")
 
         addJsonOnTextArea(automate)
         insertTerminal("Automate completé")
@@ -289,7 +295,6 @@ def question6():
 
         #automate = automaton_q1.get_good_type(jsonLoads, "dataFrame")
         automate = determinist.to_automaton_deterministic(jsonLoads())      
-        automate = automaton_q1.get_good_type(automate, "dict")
         
         addJsonOnTextArea(automate)     
         insertTerminal("Automate à été rendu deterministe")
@@ -302,7 +307,6 @@ def question71():
     if formatVerifBool():
 
         automate = automaton_q7.complem_automaton(jsonLoads())
-        automate = automaton_q1.get_good_type(automate, "dict")
 
         addJsonOnTextArea(automate)
         insertTerminal("Automate complementé")
@@ -314,7 +318,6 @@ def question72():
     if formatVerifBool():
         
         automate = automaton_q7.miroir_automaton(jsonLoads())
-        automate = automaton_q1.get_good_type(automate, "dict")
 
         addJsonOnTextArea(automate)
         insertTerminal("Automate rendu miroir")
@@ -332,7 +335,6 @@ def question73():
         json2 = json.loads(v.conversion(json2))
 
         automate = automaton_q7.produit_aefs(json1,json2)
-        automate = automaton_q1.get_good_type(automate, "dict")
 
         addJsonOnTextArea(automate)
         insertTerminal("Produits effectué")
@@ -351,7 +353,6 @@ def question74():
         json2 = json.loads(v.conversion(json2))
 
         automate = automaton_q7.concatAEF(json1,json2)
-        automate = automaton_q1.get_good_type(automate, "dict")
 
         addJsonOnTextArea(automate)
         insertTerminal("Produits effectué")
@@ -361,20 +362,18 @@ Function which links the function of the question 8 to the HMI
 def question8():
 
     if formatVerifBool():
-        insertTerminal("Question 8 en travaux")   
+        insertTerminal("Expression reguliere: " + regex_q8_q9.find_regex(jsonLoads()))  
 """
 Function which links the function of the question 9 to the HMI
 """
 def question9():
 
     if formatVerifBool():
-        insertTerminal("Question 9 en travaux")  
+        insertTerminal("Langage: " + regex_q8_q9.find_language(jsonLoads()))  
 """
 Function which links the function of the question 10 to the HMI
 """
 def question10():
-
-    #Atravailler
 
     if formatVerifBool():
         insertTerminal("Question 10 en travaux")  
@@ -391,8 +390,11 @@ Function which links the function of the question 12 to the HMI
 def question12():
 
     if formatVerifBool():
-        insertTerminal("Question 12 en travaux")  
+        automate = minimal_q12.minimal_automaton(jsonLoads())
 
+        addJsonOnTextArea(automate)
+        insertTerminal("Automate minimisé")
+        
 
 #---Main
 projectName = "projet Python"
