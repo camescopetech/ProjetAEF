@@ -60,8 +60,8 @@ def isAutomateString(automate):
             return 3
 
     #ERROR4: 'initial_state' must have one element
-    if len(initial_state) != 1:
-        return 4
+    #if not initial_state:
+    #    return 4
 
     #ERROR5: Element in 'alphabet', 'states' and 'final_states' must have any occurence
     keys_json = ['alphabet','states','final_states']
@@ -89,7 +89,7 @@ def isAutomateString(automate):
  
     #--------------------------------
     #ERROR8: states must contain initial_state
-    if initial_state[0] not in states:
+    if initial_state not in states:
         return 8
     
     #ERROR9: states must contain final_states
