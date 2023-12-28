@@ -11,6 +11,7 @@ import determinist
 import automaton_q7
 import regex_q8_q9
 import minimal_q12
+import excise
 
 #Function
 """
@@ -383,7 +384,15 @@ Function which links the function of the question 11 to the HMI
 def question11():
 
     if formatVerifBool():
-        insertTerminal("Question 11 en travaux")  
+        
+        automate = jsonLoads()
+        excise.remove_unreachable_states(automate)
+        excise.remove_epsilon_transitions(automate)
+
+        addJsonOnTextArea(automate)
+        insertTerminal("Automate éondé")
+
+
 """
 Function which links the function of the question 12 to the HMI
 """
