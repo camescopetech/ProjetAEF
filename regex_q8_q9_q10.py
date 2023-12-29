@@ -5,7 +5,7 @@ import os
 import re
 import random
 import minimal_q12 as q12
-import automaton_q2_q3 as q2
+import recognize_complete_q2_q3_q4 as q2
 
 
 def find_regex(automaton) :
