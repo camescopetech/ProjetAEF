@@ -142,7 +142,7 @@ auto7 = {
 }
 #complexe, boucle
 auto8 = {
-    'alphabet': ['a', 'b','c','d'],
+    'alphabet': ['a','b','c','d'],
     'states': [ 'q1', 'q2','q3','q4','q5','q6'],
     'initial_state': 'q1',
     'final_states': ['q3','q4','q6'],
@@ -160,7 +160,7 @@ auto8 = {
 
 #auto8 avec une transition de plus
 auto9 = {
-    'alphabet': ['a', 'b','c','d'],
+    'alphabet': ['a','b','c','d'],
     'states': [ 'q1', 'q2','q3','q4','q5','q6'],
     'initial_state': 'q1',
     'final_states': ['q3','q4','q6'],
@@ -176,6 +176,7 @@ auto9 = {
         ['q6', 'q2', 'd']
     ]
 }
+#language = ^((a(cdd|cba)*b(((ad|cda)((cba|cdd)*b))*(c|a)?))|a(b(cda|ad)(cdd)*)*c(ba((cdd)*|(b(cda|ad)))*c)*d)$
 
 #based on auto8, to check minimal AEF
 auto10 = {
@@ -209,6 +210,30 @@ auto11 = {
         ['q2', 'q3', 'b'],
         ['q3', 'q4', 'c'],
         ['q4', 'q1', 'd'],
+        ['q2', 'q5', 'c'],
+        ['q5', 'q1', 'b'],
+        ['q5', 'q6', 'd'],
+        ['q3', 'q6', 'a'],
+        ['q4', 'q6', 'a'],
+        ['q4', 'q7', 'a'],
+        ['q6', 'q7', 'b']
+    ]
+}
+
+ #auto12 with useless letter
+auto12 = {
+    'alphabet': ['a', 'b','c','d'],
+    'states': [ 'q1', 'q2','q3','q4','q5','q6','q7'],
+    'initial_state': 'q1',
+    'final_states': ['q3','q4'],
+    'transitions': [
+        ['q1', 'q2', 'a'],
+        ['q1', 'q6', 'a'],
+        ['q2', 'q3', 'b'],
+        ['q2', 'q4', 'b'],
+        ['q2', 'q3', 'b'],
+        ['q3', 'q4', 'c'],
+        ['q4', 'q6', 'd'],
         ['q2', 'q5', 'c'],
         ['q5', 'q1', 'b'],
         ['q5', 'q6', 'd'],
