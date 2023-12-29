@@ -5,11 +5,11 @@ from tkinter.scrolledtext import ScrolledText
 import json
 #local import
 import interface as v
-import automaton_q2_q3
+import recognize_complete_q2_q3_q4
 import automaton_q1
 import determinist
 import automaton_q7
-import regex_q8_q9
+import regex_q8_q9_q10
 import minimal_q12
 import excise
 
@@ -248,7 +248,7 @@ def question2():
        
         word = insertPopUp("Entrez un mot:")
 
-        if automaton_q2_q3.is_word_recognized(jsonLoads(),word):
+        if recognize_complete_q2_q3_q4.is_word_recognized(jsonLoads(),word):
             insertTerminal(word + " est reconnu par l'AEF")
         else:
             insertTerminal(word + " n'est reconnu par l'AEF")
@@ -259,7 +259,7 @@ def question3():
 
     if formatVerifBool():
 
-        if automaton_q2_q3.is_complete(jsonLoads()):
+        if recognize_complete_q2_q3_q4.is_complete(jsonLoads()):
             insertTerminal("L'automate est complet")
         else:
             insertTerminal("L'automate n'est pas complet")
@@ -270,7 +270,7 @@ def question4():
     
     if formatVerifBool():
 
-        automate = automaton_q2_q3.completing(jsonLoads())
+        automate = recognize_complete_q2_q3_q4.completing(jsonLoads())
 
         addJsonOnTextArea(automate)
         insertTerminal("Automate completé")
@@ -363,14 +363,14 @@ Function which links the function of the question 8 to the HMI
 def question8():
 
     if formatVerifBool():
-        insertTerminal("Expression reguliere: " + regex_q8_q9.find_regex(jsonLoads()))  
+        insertTerminal("Expression reguliere: " + regex_q8_q9_q10.find_regex(jsonLoads()))  
 """
 Function which links the function of the question 9 to the HMI
 """
 def question9():
 
     if formatVerifBool():
-        insertTerminal("Langage: " + regex_q8_q9.find_language(jsonLoads()))  
+        insertTerminal("Langage: " + regex_q8_q9_q10.find_language(jsonLoads()))  
 """
 Function which links the function of the question 10 to the HMI
 """
