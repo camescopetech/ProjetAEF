@@ -2,6 +2,11 @@ import automaton_q1 as q1
 import pandas as pd
 import automatons_tests as test
 import os
+import re
+import random
+import minimal_q12 as q12
+import automaton_q2_q3 as q2
+
 
 def find_regex(automaton) :
     # Process :
@@ -193,6 +198,24 @@ def refactor(results) :
 
 
 def optimize(regex) : 
+    word = regex
+    res = '^('
+    i = 0
+    while i < len(regex)-1 :
+        k = i
+        while  word[i+1] == word[i]:
+             if i < len(regex) : i += 1
+        if word[i+1] == word[i] + '*' :
+                i+=1
+                if i == k+1 : res += word[i][:-1] + '+'
+                else : res += fr'{word[i][:-1]}{{{i-k+1},}}'
+        elif i != k :  res  += word[i] + '{' + str(i-k+1) + '}'     
+        else : res += word[i]
+        i += 1
+
+    return res + word[-1] + ')$'
+
+def optimize(regex) : 
     #add +, {}, {x,} to regex
     word = regex
     res = '^('
@@ -218,11 +241,57 @@ def find_language(automaton) :
     return f'{{w ∈ {{{", ".join(auto["alphabet"])}}}| w satisfait {find_regex(auto)}}}'
 
 
-# 2 petis print pour les 2 questions :
-# print(find_regex(test.auto8))
+
+def is_automate_equivalent(automaton1,automaton2) :
+    dict1 = q1.get_good_type(q12.minimal_automaton(automaton1),'dict')
+    dict2 = q1.get_good_type(q12.minimal_automaton(automaton2),'dict')
+    alphabet = dict1['alphabet']
+
+    # eliminate trivial False case
+    if  alphabet != dict2['alphabet']:
+        return False
+    
+    # could be faster with regex below but not good enough as today
+    # regex1 = find_regex(dict1)
+    # regex2 = find_regex(dict2)
+    # if regex1 == regex2 :
+        # return True
+
+    words1 = generate_words(dict1,len(dict1['states']*len(alphabet))*len(dict1['transitions'])/2) # arbitrary number words wanted. could be shorter
+    words2 = generate_words(dict2,len(dict2['states']*len(alphabet))*len(dict2['transitions'])/2)
+    for word in set(words1) :
+        if not q2.is_word_recognized(dict2, word) :
+            return False
+    for word in set(words2) :
+        if not q2.is_word_recognized(dict1, word) :
+            return False    
+    return True  
+    
+def generate_words(dict, number_words_wanted) :
+    res = []
+    while len(res) < number_words_wanted :
+        current_word = []
+        current_state = dict['initial_state']
+        while len(current_word) < len(dict['states'] * len(dict['alphabet']))  :
+            #randomly select a letter to generate a correct word
+            next_letter = random.choice(dict['alphabet'])
+            next_state = q1.is_transition_valid(dict, next_letter,current_state)
+            if  next_state : #check letter correct
+                current_word.append(next_letter)
+                current_state = random.choice(next_state) # case not determinist, multiple possibilities
+            if current_state in dict['final_states'] : # valid word for this automaton
+                res.append(''.join(current_word))
+
+                # case of a final state unescapable
+                if current_state not in dict['transitions'][:][0] :
+                    break   #to escape
+    return res
+
+
+# 3 petis print pour les 3 questions :
+
 # print(find_language(test.auto8))
+ 
+# print(find_regex(test.auto9))
 
-
-
-
-#still could be way better
+# print(is_automate_equivalent(test.auto5,test.auto6))
