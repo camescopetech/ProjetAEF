@@ -1,5 +1,5 @@
 from operator import concat
-import automaton_q2_q3 as q2
+import recognize_complete_q2_q3_q4 as q2
 import automaton_q1 as q1
 from readline import append_history_file
 import pandas as pd
