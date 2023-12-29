@@ -193,24 +193,6 @@ def refactor(results) :
 
 
 def optimize(regex) : 
-    word = regex
-    res = '^('
-    i = 0
-    while i < len(regex)-1 :
-        k = i
-        while  word[i+1] == word[i]:
-             if i < len(regex) : i += 1
-        if word[i+1] == word[i] + '*' :
-                i+=1
-                if i == k+1 : res += word[i][:-1] + '+'
-                else : res += fr'{word[i][:-1]}{{{i-k+1},}}'
-        elif i != k :  res  += word[i] + '{' + str(i-k+1) + '}'     
-        else : res += word[i]
-        i += 1
-
-    return res + word[-1] + ')$'
-
-def optimize(regex) : 
     #add +, {}, {x,} to regex
     word = regex
     res = '^('
@@ -237,7 +219,10 @@ def find_language(automaton) :
 
 
 # 2 petis print pour les 2 questions :
-
-# print(find_language(test.auto8))
- 
 # print(find_regex(test.auto8))
+# print(find_language(test.auto8))
+
+
+
+
+#still could be way better
