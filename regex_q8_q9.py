@@ -4,27 +4,19 @@ import automatons_tests as test
 import os
 
 def find_regex(automaton) :
-    # Il faut verifier que les cycles imbriquées ne soit pas empruntés plusieurs fois. Ensuite on fait juste les chemins qui mènent au finals states
-    
-    # on cherche les chemins sans loop qui mènent à un état final dans le but d'obtenir une liste qui va droit à l'état final. 
-    # Ensuite, on passe dans les etats et on rajoute des les lettres des loops avec *.
-    # En cas de loop imbriqué,
-    # Regarder si la loop ne démare pas comme le path fini.
-    # A chaque état dans la loop, on vérifie si l'état n'est pas membre d'une autre loop
-
-
-    # Large apres pavé au dessus
-    # On cherche les loops, on cherche les chemins qui finissent depuis les etats, on bricole
-    # schéma : si des loops démarre au meme endroit : (1?2?)*, si loop démarre dans un état d'une loop : (1a 2* 1b)*
-    #Pour le moment on peut mettre des parenthese a chaque loop ajouté
-
+    # Process :
+    # 1. look ending path with no loop
+    # 2. find every loop
+    # 3. for each ending path, spot every loop (and imbricated cycle = loop who can be followed through the precedent loop) which could be used and who does not took the end path way.
+    # Each loop can be followed only once per position of the path. Do this at every position of the ending_path
+    # 4.The regex will be cleaned and optimize with subfunction below
     df = q1.get_good_type(automaton, 'dataFrame')
-    cycles = find_cycle(df) # sort les loops dans le df
+    cycles = find_cycle(df) # 1.
 
     ini_state = df[df.initial_state == True].index[0]
-    paths = end_path(df,ini_state)
+    paths = end_path(df,ini_state) # 2.
     res = []
-    for path in paths :
+    for path in paths : # start 3.
 
         current_natural_path_index = 0
         word = []
@@ -33,16 +25,11 @@ def find_regex(automaton) :
         states_full = path[0]
         letters_full = path[1]
 
-        #parlons de gestion des cycles : dès qu'on en trouve un, il faut regarder si il en entraine un autre, qu'il faut imbriquer dedans, et ainsi de suite. 
-        # Une fois un cycle emprunté, il ne faut plus le prendre en compte.
-        # Il faut écrire (1a (2a3(...)*2b)* 1b)*
-        # Potentiel introduction du ? pour des cycles démarrant du même état
-        # On met au début de la liste à chaque fois qu'on trouve une loop, qu'on ajoute en entiers directement pour conserver l'ordre 
-        stack = [(ini_state,'start',False)]
+        # initialize stack with inital state then end_path data
+        stack = [(ini_state,'start',False)] 
         for i in range(len(states_full)) :
             stack.append((states_full[i],letters_full[i],True))
-        #maitenant : il faut réinitialiser les cycles pour qu'il puissent être pris à chaque étape de l'avancement vers le mots final non bouclé    
-        # DERNIER TRUC A FAIRE : ON RENTRE PAS DANS UN CYCLE SI L'ETAT SUIVANT EST CELUI DU PATH NON loop
+            
         while stack :
 
             letter = stack[0][1]
@@ -51,41 +38,24 @@ def find_regex(automaton) :
             is_default_path = stack[0][2]
             if is_default_path :
                 current_cycles = []
-
-            if is_default_path :
                 current_natural_path_index += 1
-            
-
-            stack.pop(0)
+            stack.pop(0) # we unstack here because we add loops states at the beggining and all data saved in variables
 
             if current_state :
                 for cycle in cycles :
 
-                    if current_state in cycle[0] and cycle not in current_cycles : #nouveau cycle trouvé
-                      # ICI METTRE IF AVEC PROCHAIN ETAT PAS DANS LECELUI DU PATH
+                    if current_state in cycle[0] and cycle not in current_cycles :  #new cycle found but maybe not correct
                     
                         current_cycles.append(cycle)
-                        # temp_word = []
                         debut_cycle = cycle[0].index(current_state)
                         # on ne prend pas le cycle si pas prochain. On prend si dernier etat ou cycle demarre pas par suite path
-                        if (current_natural_path_index+1 >= len(states_full)) or cycle[0][(debut_cycle+1)%len(cycle[0])] != path[0][(current_natural_path_index+1)]:
-
-
-
+                        if (current_natural_path_index+1 >= len(states_full)) or cycle[0][(debut_cycle+1)%len(cycle[0])] != path[0][(current_natural_path_index+1)]: # if the loop is not taking ending_path next state first, loop ok
                             for i in range(len(cycle[0])):
-
                                 stack.insert(i,(cycle[0][(debut_cycle+i)%len(cycle[0])],cycle[1][(debut_cycle+i)%len(cycle[0])],False))
-
-
-                        #idée : a la fin de la loop for, ajoute * + taille de la loop + 1e, 2e, 3e... loop. A la restitution, on regarde si * dans les taille de loop caracteres precedant. Si oui loop imbriqué
-                        # Il faut impérativement traité la loop la plus imbriquée en premier
-
                             stack.insert(len(cycle[0]),('False',['*',len(cycle[0]) ,len(current_cycles)], False))
 
             word.append(letter) 
-
         res.append(word)
-
     return optimize(refactor(star(res)))    
 
 
@@ -139,7 +109,7 @@ def end_path(df,state) :
                 if next_state[0] not in path : #state not already in the current path
                     stack.append((next_state[0], path + next_state,letters_list + [letter])) # supply stack with updated values
        
-    stack.pop(0)        
+        stack.pop(0)        
     return  paths_found          
 
 
@@ -185,11 +155,10 @@ def star(result) :
 
 
 
+
 def refactor(results) :
-    # Dépiler le mot des mots à comprimer
-    # Le mot à ajouter est la liste commune + [(fin_mot1|fin_mot2)]
-    # On garde le nouveau pour le comparer à tous ceux qui commencent pareil. 
-    # On l'ajoute à une liste finale seulement quand commonprefix retourne [] avec tous les mots restants.
+    # For each end_path we have a sub regex
+    # We add greatest_common_prefix + [(fin_mot1|fin_mot2)] to the list, then we iterate again until we got no common prefix
     liste = results.copy()
     res = []
     while liste :
@@ -203,21 +172,23 @@ def refactor(results) :
                 prefix = os.path.commonprefix([word,other_word])
                 temp = liste.index(other_word)      
         if prefix :
-            if not word[len(prefix):] : 
+            if not word[len(prefix):] : #if full match, parenthesis for prefix of more than one character
                 if len(liste[temp][len(prefix):]) == 1 : new_word = prefix+ [f'{"".join(liste[temp][len(prefix):])}?']
-                else :new_word = prefix+ [f'({"".join(liste[temp][len(prefix):])})?']
+                else : new_word = prefix + [f'({"".join(liste[temp][len(prefix):])})?']
+
             elif not liste[temp][len(prefix):] : 
                 if len(word[len(prefix):]) == 1 : new_word = prefix + [f'{"".join(word[len(prefix):])}?']
                 else : new_word = prefix + [f'({"".join(word[len(prefix):])})?']
+            
             else :       
-                new_word = prefix + [f'({"".join(word[len(prefix):])}|{"".join(liste[temp][len(prefix):])})'] # doit etre liste est str actuellement
+                new_word = prefix + [f'({"".join(word[len(prefix):])}|{"".join(liste[temp][len(prefix):])})'] 
             liste.pop(temp)
             liste[0] = new_word
-        else :
+        else : #no common prefix so start again with next word
             res+= word + ['|']
             liste.pop(0) 
 
-    finished =  res[:-1]   
+    finished =  res[:-1] #last item is |  
     return finished
 
 
@@ -225,6 +196,26 @@ def optimize(regex) :
     word = regex
     res = '^('
     i = 0
+    while i < len(regex)-1 :
+        k = i
+        while  word[i+1] == word[i]:
+             if i < len(regex) : i += 1
+        if word[i+1] == word[i] + '*' :
+                i+=1
+                if i == k+1 : res += word[i][:-1] + '+'
+                else : res += fr'{word[i][:-1]}{{{i-k+1},}}'
+        elif i != k :  res  += word[i] + '{' + str(i-k+1) + '}'     
+        else : res += word[i]
+        i += 1
+
+    return res + word[-1] + ')$'
+
+def optimize(regex) : 
+    #add +, {}, {x,} to regex
+    word = regex
+    res = '^('
+    i = 0
+    # i is the position. Does not iterate one by one cause we group identical el with k
     while i < len(regex)-1 :
         k = i
         while  word[i+1] == word[i]:
