@@ -43,8 +43,13 @@ def minimal_automaton(automaton) : #based on find_cycles
     #delete transitions to useless states while ignoring not determinist transitions
     df_good.loc[:,alphabet] = df_good[alphabet].applymap(lambda x: x if re.search(',',x) else q1.null_transition if x not in usefull_states  else x) 
 
+    #del useless letter 
+    for letter in alphabet :
+        if set(df_good[letter]) == {q1.null_transition} :
+            df_good = df_good.drop(letter, axis =1)
+
     return  df_good         
 
 
-# print(q1.get_good_type(test.auto11,'dataFrame'))
-# print(minimal_automaton(test.auto11))
+# print(q1.get_good_type(test.auto12,'dataFrame'))
+# print(minimal_automaton(test.auto12))
