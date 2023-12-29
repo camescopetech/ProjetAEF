@@ -4,68 +4,16 @@ import pandas as pd
 null_transition = 'null'
 phi_transition = 'phi'
 
-automate_non_deter = {
-    'alphabet': ['a','b'],
-    'states' : ['0','1','2','3'],
-    'initial_state' : '0',
-    'final_states' : ['2','3'],
-    'transitions': [
-        ['0','0','b'],
-        ['0','1','a'],
-        ['0','3','a'],
-
-        ['1','1','b'],
-        ['1','2','a'],
-        ['1','2','b'],
-
-        ['2','2','a'],
-        ['2','2','b'],
-
-        ['3','3','a']
-    ]
-}
-automate_deter = {
-    'alphabet': ['a','b'],
-    'states' : ['0','1','2','3'],
-    'initial_state' : '0',
-    'final_states' : ['2','3'],
-    'transitions': [
-        ['0','3','a'],
-        ['0','1','b'],
-
-        ['1','2','b'],
-        ['1','1','a'],
-
-        ['3','3','a']
-    ]
-}
-
-
-df_auto_non_deter = pd.DataFrame(index = ['0','1','2','3'], data = {
-    'a': ['1, 3','2','2','3'],
-    'b' : ['0','1, 2','2',null_transition],
-    'initial_state': [True,False,False,False],
-    'final_states':[False,False,True,True]
-})
-
-df_auto_deter = pd.DataFrame(index = ['0','1','2','3'], data = {
-    'a': ['3','1',null_transition,'3'],
-    'b' : ['1','2',null_transition,null_transition],
-    'initial_state': [True,False,False,False],
-    'final_states':[False,False,True,True]
-})
-# print(df_auto_deter)
-
-def dict_to_table(dico) : #ok
+def dict_to_table(dico) : 
     states = dico['states']
-    df = pd.DataFrame(index= states)
+    df = pd.DataFrame(index = states)
     for letter in dico['alphabet'] :
         values = [null_transition for _ in range(len(states))]
         for transition in dico['transitions'] :
             start_position = -1
             end_position = null_transition
             if transition[2] == letter :
-                k = 0     #hashtable maybe
+                k = 0     #hashtable maybe but complex
                 while(start_position == -1 or end_position == null_transition) :
                     temp = states[k]
                     if transition[1] == temp :
@@ -78,21 +26,18 @@ def dict_to_table(dico) : #ok
         for value in values :
             if ', ' in value :
                 values[values.index(value)] = value[len(null_transition)+2:]
-
-        df[f'{letter}'] = values
+        df[letter] = values
 
     df['initial_state'] = False
     df['final_states'] = False  
     
-
     for i in range(len(states)) :
         if dico['initial_state'] == df.index[i] :
             df.loc[states[i],'initial_state'] = True
 
     final_states = dico['final_states'].copy()  
     k = 0
-    # print(df)
-    while  len(final_states)  != 0 :
+    while  len(final_states) != 0 :
         if final_states[0] == df.index[k] :
             df.loc[states[k],'final_states'] = True
             k=0
@@ -107,7 +52,7 @@ def table_to_dict(df) :
     for col in list(df.columns[:-2]) :
         for row in list(df.index) :
             if df[str(col)].loc[str(row)] != null_transition:
-                splitted_states = df[str(col)].loc[row].split(', ')
+                splitted_states = df[str(col)].loc[row].split(', ') #case not determinist, multiple states (one if determinist)
                 for arrival_state in splitted_states :
                     transition.append([row,arrival_state,col])
                         
@@ -131,22 +76,6 @@ def get_good_type(automaton,wanted_type) :
         return automaton
     return table_to_dict(automaton)
 
-# print(dict_to_table(automate) == df_auto)
-# print(table_to_dict(df_auto))
-# print(automate)
-# print(automate == table_to_dict(df_auto))
-# print(table_to_dict(dict_to_table(automate)))
-
-# print(table_to_dict(dict_to_table(automate)) == automate)
-
-
-# df_test = dict_to_table(automate)
-#print(df_test)
-# print(list(df_test[df_test.final == True].index))
-#print(table_to_dict(df_test))
-# print(automate['transitions'] == sorted(automate['transitions']))
-# print(sorted(automate['transitions']))
-
 def save_automaton(automaton,file_path='Untitled.txt') :
     with open(file_path,'w') as file :
         file.write(str(automaton))
@@ -158,16 +87,9 @@ def import_automaton(file_path) :
         automaton = eval(file.read())
     return automaton
 
-#auto2 = import_automaton('test.txt')  
-# print(dict_to_table(auto2))
+
 
 def is_transition_valid(df, letter, state) :
     if df[str(letter)].loc[str(state)] == null_transition :
         return False
     else : return df[str(letter)].loc[str(state)].split(', ')
-
-# print(is_transition_valid(df_auto_deter,'a','0'))
-# print(df_auto_deter)
-
-
-
