@@ -89,7 +89,8 @@ def import_automaton(file_path) :
 
 
 
-def is_transition_valid(df, letter, state) :
+def is_transition_valid(automaton, letter, state) :
+    df = get_good_type(automaton,'dataFrame')
     if df[str(letter)].loc[str(state)] == null_transition :
         return False
     else : return df[str(letter)].loc[str(state)].split(', ')
