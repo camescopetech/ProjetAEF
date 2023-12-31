@@ -257,8 +257,8 @@ def is_automate_equivalent(automaton1,automaton2) :
     # if regex1 == regex2 :
         # return True
 
-    words1 = generate_words(dict1,len(dict1['states']*len(alphabet))*len(dict1['transitions'])/2) # arbitrary number words wanted
-    words2 = generate_words(dict2,len(dict2['states']*len(alphabet))*len(dict2['transitions'])/2)
+    words1 = generate_words(dict1,len(dict1['states']*len(alphabet))*len(dict1['transitions'])//2) # arbitrary number words wanted. could be shorter
+    words2 = generate_words(dict2,len(dict2['states']*len(alphabet))*len(dict2['transitions'])//2)
     for word in set(words1) :
         if not q2.is_word_recognized(dict2, word) :
             if q2.is_word_recognized(dict1,word) : #no longer needed but reenforce safety
@@ -272,7 +272,7 @@ def is_automate_equivalent(automaton1,automaton2) :
     
 def generate_words(dict, number_words_wanted) :
     res = []
-    while len(res) < number_words_wanted :
+    while len(set(res)) < number_words_wanted  or len(res) < number_words_wanted*5 :
         current_word = []
         current_state = dict['initial_state']
         while len(current_word) < len(dict['states'] * len(dict['alphabet']))  :
@@ -280,7 +280,7 @@ def generate_words(dict, number_words_wanted) :
             if current_state in dict['final_states'] : # valid word for this automaton
                 res.append(''.join(current_word))
                 # case of a final state unescapable
-                if current_state not in dict['transitions'][:][0] :
+                if current_state not in [transi[0] for transi in dict['transitions']] :
                     break   #to escape
 
             #randomly select a letter to generate a correct word
@@ -298,4 +298,3 @@ def generate_words(dict, number_words_wanted) :
  
 # print(find_regex(test.auto9))
 
-# print(is_automate_equivalent(test.auto5,test.auto5))
