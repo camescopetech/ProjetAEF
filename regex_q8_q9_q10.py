@@ -5,7 +5,7 @@ import os
 import re
 import random
 import minimal_q12 as q12
-import recognize_complete_q2_q3_q4 as q2
+import automaton_q2_q3 as q2
 
 
 def find_regex(automaton) :
@@ -257,14 +257,17 @@ def is_automate_equivalent(automaton1,automaton2) :
     # if regex1 == regex2 :
         # return True
 
-    words1 = generate_words(dict1,len(dict1['states']*len(alphabet))*len(dict1['transitions'])/2) # arbitrary number words wanted. could be shorter
+    words1 = generate_words(dict1,len(dict1['states']*len(alphabet))*len(dict1['transitions'])/2) # arbitrary number words wanted
     words2 = generate_words(dict2,len(dict2['states']*len(alphabet))*len(dict2['transitions'])/2)
     for word in set(words1) :
         if not q2.is_word_recognized(dict2, word) :
-            return False
+            if q2.is_word_recognized(dict1,word) : #no longer needed but reenforce safety
+                return False
+
     for word in set(words2) :
         if not q2.is_word_recognized(dict1, word) :
-            return False    
+            if q2.is_word_recognized(dict2,word) : #no longer needed but reenforce safety
+                return False
     return True  
     
 def generate_words(dict, number_words_wanted) :
@@ -273,18 +276,19 @@ def generate_words(dict, number_words_wanted) :
         current_word = []
         current_state = dict['initial_state']
         while len(current_word) < len(dict['states'] * len(dict['alphabet']))  :
+
+            if current_state in dict['final_states'] : # valid word for this automaton
+                res.append(''.join(current_word))
+                # case of a final state unescapable
+                if current_state not in dict['transitions'][:][0] :
+                    break   #to escape
+
             #randomly select a letter to generate a correct word
             next_letter = random.choice(dict['alphabet'])
             next_state = q1.is_transition_valid(dict, next_letter,current_state)
             if  next_state : #check letter correct
                 current_word.append(next_letter)
-                current_state = random.choice(next_state) # case not determinist, multiple possibilities
-            if current_state in dict['final_states'] : # valid word for this automaton
-                res.append(''.join(current_word))
-
-                # case of a final state unescapable
-                if current_state not in dict['transitions'][:][0] :
-                    break   #to escape
+                current_state = random.choice(next_state) # case not determinist, multiple possibilities          
     return res
 
 
@@ -294,4 +298,4 @@ def generate_words(dict, number_words_wanted) :
  
 # print(find_regex(test.auto9))
 
-# print(is_automate_equivalent(test.auto5,test.auto6))
+# print(is_automate_equivalent(test.auto5,test.auto5))
