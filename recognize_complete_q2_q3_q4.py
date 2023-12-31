@@ -1,30 +1,32 @@
 import automaton_q1 as q1
 import pandas as pd
 import automatons_tests as test
+import determinist
 
-def is_word_recognized(automaton, word, state = None, rec = []) : 
+def is_word_recognized(automaton, word) : 
     #decorator for recursing function below
-    df = q1.get_good_type(automaton,'dataFrame')
+    if not determinist.is_automaton_deterministic(automaton) : # be deterministic simplify
+        df = q1.get_good_type(automaton,'dataFrame') 
+        print('ici')
+    else : 
+        df =  df = q1.get_good_type(determinist.to_automaton_deterministic(automaton),'dataFrame') 
     alphabet = df.columns[:-2]
-
+    
     # verification that avery letter of the word exist in this automaton
     for letter in word :
         if letter not in alphabet :
-            return False
-    if state == None :
-        state = list(df[df.initial_state == True].index)[0]
+            return False # eliminate trivial case
+    state = list(df[df.initial_state == True].index)[0]
+    rec = []
     return is_word_recognized_rec(df,word,state,rec)
            
-
-
 
 def is_word_recognized_rec(df,word,state,rec) :
     if not len(word) : # exit condition
         return df.final_states.loc[str(state)]
     else :
         if q1.is_transition_valid(df,word[0],state) :
-            for stat in q1.is_transition_valid(df,word[0],state) :
-                return is_word_recognized_rec(df,word[1:],stat,rec)
+            return is_word_recognized_rec(df,word[1:],', '.join(q1.is_transition_valid(df,word[0],state)),rec)
         else : return False        
 
 
