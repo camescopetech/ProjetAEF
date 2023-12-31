@@ -7,7 +7,6 @@ def is_word_recognized(automaton, word) :
     #decorator for recursing function below
     if not determinist.is_automaton_deterministic(automaton) : # be deterministic simplify
         df = q1.get_good_type(automaton,'dataFrame') 
-        print('ici')
     else : 
         df =  df = q1.get_good_type(determinist.to_automaton_deterministic(automaton),'dataFrame') 
     alphabet = df.columns[:-2]
