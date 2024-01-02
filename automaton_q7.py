@@ -67,18 +67,14 @@ def complem_automaton(automaton):
         'final_states': [state for state in automaton['states'] if state not in automaton['final_states']],
         'transitions': automaton['transitions']
     }
-    #df = pd.DataFrame.from_dict(complem_dict, orient='index')
-    #return df
-
-    return complem_dict
-
+    
+    df = pd.DataFrame.from_dict(complem_dict, orient='index')
+    return df
 
 
-# df_automate = q1.dict_to_table(automate)
-# print(df_automate)
 
-# if not q2.is_complete(df_automate):
-#     df_automate = q2.completing(df_automate)
+# if not q2.is_complete(automate):
+#     df_automate = q2.completing(automate)
 
 # df_automate = complem_automaton(automate)
 # print(df_automate)
@@ -97,14 +93,13 @@ def miroir_automaton(automaton):
         # Inverser la direction des transitions
     }
 
-    #df = pd.DataFrame.from_dict(miroir_dict, orient='index')
-    #return df
-    return miroir_dict
+    df = pd.DataFrame.from_dict(miroir_dict, orient='index')
+    return df
 
-# df_automate = q1.dict_to_table(automate)
 
-# if not q2.is_complete(df_automate):
-#     df_automate = q2.completing(df_automate)
+
+# if not q2.is_complete(automate):
+#     df_automate = q2.completing(automate)
 
 # df_automate = miroir_automaton(automate)
 # print(df_automate)
@@ -175,22 +170,19 @@ def produit_aefs(automate1, automate2):
 
 
 
-    # # Supprimer les transitions dupliquees
-    # prodAutom['transitions'] = list(set(tuple(t) for t in prodAutom['transitions']))
                 
-    #df = pd.DataFrame.from_dict(prodAutom, orient='index').transpose()
-    #return df
+    df = pd.DataFrame.from_dict(prodAutom, orient='index').transpose()
+    return df
                     
-    return prodAutom
 
 
 
-# pd.set_option('display.max_rows', None)  # Aucune limite sur le nombre de lignes
-# pd.set_option('display.max_columns', None)  # Aucune limite sur le nombre de colonnes
-# pd.set_option('display.width', None)  # Ajuster la largeur pour accommoder chaque colonne
-# pd.set_option('display.max_colwidth', None)  # Aucune limite sur la largeur du contenu de la colonne
+pd.set_option('display.max_rows', None)  # Aucune limite sur le nombre de lignes
+pd.set_option('display.max_columns', None)  # Aucune limite sur le nombre de colonnes
+pd.set_option('display.width', None)  # Ajuster la largeur pour accommoder chaque colonne
+pd.set_option('display.max_colwidth', None)  # Aucune limite sur la largeur du contenu de la colonne
 
-print(produit_aefs(automate,automate2))
+# print(produit_aefs(automate,automate2))
 
 
 
@@ -221,10 +213,9 @@ def concatAEF(automate1,automate2):
         concatAutom['transitions'].append(new_transition)   
 
 
-    #df = pd.DataFrame.from_dict(concatAutom, orient='index').transpose()
-    #return df
-        
-    return concatAutom
+    df = pd.DataFrame.from_dict(concatAutom, orient='index').transpose()
+    return df
+
 
 
 
