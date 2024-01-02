@@ -10,7 +10,6 @@ def is_word_recognized(automaton, word) :
     else : 
         df =  df = q1.get_good_type(determinist.to_automaton_deterministic(automaton),'dataFrame') 
     alphabet = df.columns[:-2]
-    print(df)
     # verification that avery letter of the word exist in this automaton
     for letter in word :
         if letter not in alphabet :
