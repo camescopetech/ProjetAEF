@@ -206,8 +206,8 @@ Check if the json format is correct
 """
 def drawAutomate():
 
-    if formatVerifBool():
-        v.drawAutomate(jsonLoads())
+    #if formatVerifBool():
+    v.drawAutomate(jsonLoads())
 
 #Verification
 """
@@ -376,8 +376,21 @@ Function which links the function of the question 10 to the HMI
 """
 def question10():
 
-    if formatVerifBool():
-        insertTerminal("Question 10 en travaux")  
+    jsonTab = json2loadsAndVerif()
+    json1 = jsonTab[0]
+    json2 = jsonTab[1]
+
+    if json1 != '' and json2 != '':
+        json1 = json.loads(v.conversion(json1))
+        json2 = json.loads(v.conversion(json2))
+
+        isEqui = regex_q8_q9_q10.is_automate_equivalent(json1,json2)
+
+        if isEqui:
+            insertTerminal("Les deux automates sont equivalents")
+        else: 
+            insertTerminal("Les deux automates ne sont pas equivalents")
+
 """
 Function which links the function of the question 11 to the HMI
 """
