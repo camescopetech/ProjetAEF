@@ -5,12 +5,12 @@ import determinist
 
 def is_word_recognized(automaton, word) : 
     #decorator for recursing function below
-    if not determinist.is_automaton_deterministic(automaton) : # be deterministic simplify
+    if  determinist.is_automaton_deterministic(automaton)[0] : # be deterministic simplify
         df = q1.get_good_type(automaton,'dataFrame') 
     else : 
         df =  df = q1.get_good_type(determinist.to_automaton_deterministic(automaton),'dataFrame') 
     alphabet = df.columns[:-2]
-    
+    print(df)
     # verification that avery letter of the word exist in this automaton
     for letter in word :
         if letter not in alphabet :
