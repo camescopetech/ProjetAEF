@@ -272,7 +272,7 @@ def is_automate_equivalent(automaton1,automaton2) :
     
 def generate_words(dict, number_words_wanted) :
     res = []
-    while len(set(res)) < number_words_wanted  or len(res) < number_words_wanted*5 :
+    while len(res) < number_words_wanted  :
         current_word = []
         current_state = dict['initial_state']
         while len(current_word) < len(dict['states'] * len(dict['alphabet']))  :
