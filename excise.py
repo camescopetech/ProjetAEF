@@ -22,10 +22,11 @@ def reachable_states(initial_state, transitions):
 
     while stack:
         current_state = stack.pop()
+ 
         # Going over the transitions to find the accessible states
         for transition in transitions:
             if transition[0] == current_state:
-                next_state = transition[2]
+                next_state = transition[1]
                 if next_state not in reachable:
                     reachable.add(next_state)
                     stack.append(next_state)
@@ -47,8 +48,7 @@ def remove_unreachable_states(automate):
     transitions = automate['transitions']
 
     reachable = reachable_states(initial_state, transitions)
-
-    new_transitions = [transition for transition in transitions if transition[0] in reachable and transition[2] in reachable]
+    new_transitions = [transition for transition in transitions if transition[0] in reachable and transition[1] in reachable]
 
     automate['states'] = list(reachable)
     automate['transitions'] = new_transitions
