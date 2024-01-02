@@ -68,8 +68,9 @@ def complem_automaton(automaton):
         'transitions': automaton['transitions']
     }
     
-    df = pd.DataFrame.from_dict(complem_dict, orient='index')
-    return df
+    #df = pd.DataFrame.from_dict(complem_dict, orient='index')
+    #return df
+    return complem_dict
 
 
 
@@ -93,8 +94,9 @@ def miroir_automaton(automaton):
         # Inverser la direction des transitions
     }
 
-    df = pd.DataFrame.from_dict(miroir_dict, orient='index')
-    return df
+    #df = pd.DataFrame.from_dict(miroir_dict, orient='index')
+    #return df
+    return miroir_dict
 
 
 
@@ -171,8 +173,9 @@ def produit_aefs(automate1, automate2):
 
 
                 
-    df = pd.DataFrame.from_dict(prodAutom, orient='index').transpose()
-    return df
+    #df = pd.DataFrame.from_dict(prodAutom, orient='index').transpose()
+    #return df
+    return prodAutom
                     
 
 
@@ -213,8 +216,9 @@ def concatAEF(automate1,automate2):
         concatAutom['transitions'].append(new_transition)   
 
 
-    df = pd.DataFrame.from_dict(concatAutom, orient='index').transpose()
-    return df
+    #df = pd.DataFrame.from_dict(concatAutom, orient='index').transpose()
+    #return df
+    return concatAutom
 
 
 
