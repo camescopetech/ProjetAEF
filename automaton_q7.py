@@ -63,14 +63,13 @@ def complem_automaton(automaton):
         'alphabet': automaton['alphabet'],
         'states': automaton['states'],
         'initial_state': automaton['initial_state'],  
-         # Chaque état qui n'est pas un état final devient un état final, et vice versa
+         # Every state that is not a final state becomes a final state, and vice versa.
         'final_states': [state for state in automaton['states'] if state not in automaton['final_states']],
         'transitions': automaton['transitions']
     }
     
-    #df = pd.DataFrame.from_dict(complem_dict, orient='index')
-    #return df
-    return complem_dict
+    df = q1.dict_to_table(complem_dict)
+    return df
 
 
 
@@ -88,15 +87,14 @@ def miroir_automaton(automaton):
     miroir_dict = {
         'alphabet': automaton['alphabet'],
         'states': automaton['states'],
-        'initial_state': automaton['final_states'],  # Inverser les etats finaux comme etats initiaux
-        'final_states': automaton['initial_state'],  # Inverser l'etat initial comme etat final
+        'initial_state': automaton['final_states'],  # Invert final states as initial states
+        'final_states': [automaton['initial_state']],  # Invert initial state as final state
         'transitions': [[transition[1], transition[0], transition[2]] for transition in automaton['transitions']]
-        # Inverser la direction des transitions
+        # Reverse the direction of transitions
     }
 
-    #df = pd.DataFrame.from_dict(miroir_dict, orient='index')
-    #return df
-    return miroir_dict
+    df = q1.dict_to_table(miroir_dict)
+    return df
 
 
 
@@ -112,7 +110,7 @@ def miroir_automaton(automaton):
 # ************************** FONCTION PROD *********************
 
 def produit_aefs(automate1, automate2):
-    # Verifier que les alphabets sont les memes pour les deux automates
+    # Check that the alphabets are the same for both automata
     if automate1['alphabet'] != automate2['alphabet']:
         raise ValueError("Les alphabets des deux automates doivent etre identiques.")
 
@@ -133,14 +131,14 @@ def produit_aefs(automate1, automate2):
     }
 
 
-    # état final
-    # Un état est final dans le produit si et seulement si chaque composant est final dans son automate respectif
+    # final state
+    # A state is final in the product if and only if each component is final in its respective automaton
     if automate1['final_states'] and automate2['final_states']:
         prodAutom['final_states'] = [f"{automate1['final_states'][1]},{automate2['final_states'][1]}"]
 
 
 
-     # Fonction pour trouver les transitions pour un état combiné donné
+     # Function for finding transitions for a given combined state
     def find_transitions(state_combined):
         state1, state2 = state_combined.split(',')
         transitions_found = []
@@ -155,8 +153,8 @@ def produit_aefs(automate1, automate2):
 
         return transitions_found
 
-    # Ajouter les transitions à l'automate de production
-    states_to_process = [prodAutom['initial_state'][0]]  # Utilisation de l'élément 0 de la liste
+    # Add transitions to the production automaton
+    states_to_process = [prodAutom['initial_state'][0]]  # Using element 0 of the list
     processed_states = set()
 
     while states_to_process:
@@ -173,17 +171,16 @@ def produit_aefs(automate1, automate2):
 
 
                 
-    #df = pd.DataFrame.from_dict(prodAutom, orient='index').transpose()
-    #return df
-    return prodAutom
+    df = q1.dict_to_table(prodAutom)
+    return df
                     
 
 
 
-pd.set_option('display.max_rows', None)  # Aucune limite sur le nombre de lignes
-pd.set_option('display.max_columns', None)  # Aucune limite sur le nombre de colonnes
-pd.set_option('display.width', None)  # Ajuster la largeur pour accommoder chaque colonne
-pd.set_option('display.max_colwidth', None)  # Aucune limite sur la largeur du contenu de la colonne
+# pd.set_option('display.max_rows', None)  # Aucune limite sur le nombre de lignes
+# pd.set_option('display.max_columns', None)  # Aucune limite sur le nombre de colonnes
+# pd.set_option('display.width', None)  # Ajuster la largeur pour accommoder chaque colonne
+# pd.set_option('display.max_colwidth', None)  # Aucune limite sur la largeur du contenu de la colonne
 
 # print(produit_aefs(automate,automate2))
 
@@ -216,15 +213,13 @@ def concatAEF(automate1,automate2):
         concatAutom['transitions'].append(new_transition)   
 
 
-    #df = pd.DataFrame.from_dict(concatAutom, orient='index').transpose()
-    #return df
-    return concatAutom
+    df = q1.dict_to_table(concatAutom)
+    return df
 
 
 
 
-# automate = concatAEF(automate,automate2)
-# print(automate)
+# print(concatAEF(automate,automate2))
 
 
 
