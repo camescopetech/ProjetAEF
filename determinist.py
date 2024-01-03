@@ -25,7 +25,14 @@ def is_automaton_deterministic(automaton):
                     listTransi.append(transi[2])                      # If not append the letter to the list of transitions
     return (True,"The automaton is deterministic")                      # WHen we are here we are sure that the automaton is deterministic 
                
-def to_automaton_deterministic(afn):
+def to_automaton_deterministic(automaton):
+    """ Transform an non deterministic automanton to a deterministic automaton """
+    if type(automaton)  == dict :                      # Verify if the automaton is a dictionary or a table. 
+        afn = automaton
+    elif type(automaton) == pd.DataFrame :
+        afn = table_to_dict(automaton)                      # Transform the table on dictionary  
+    else :
+        raise TypeError(f'automaton_specified wron type : dict or dataframe expected, got {type(automaton)}')   
     afd = {                      # Empty automaton who become to be the final deterministic automaton 
         'alphabet': afn['alphabet'],
         'states': [],
