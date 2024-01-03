@@ -68,8 +68,9 @@ def complem_automaton(automaton):
         'transitions': automaton['transitions']
     }
     
-    df = q1.dict_to_table(complem_dict)
-    return df
+    #df = q1.dict_to_table(complem_dict)
+    #return df
+    return complem_dict
 
 
 
@@ -93,8 +94,9 @@ def miroir_automaton(automaton):
         # Reverse the direction of transitions
     }
 
-    df = q1.dict_to_table(miroir_dict)
-    return df
+    #df = q1.dict_to_table(miroir_dict)
+    #return df
+    return miroir_dict
 
 
 
@@ -171,8 +173,9 @@ def produit_aefs(automate1, automate2):
 
 
                 
-    df = q1.dict_to_table(prodAutom)
-    return df
+    #df = q1.dict_to_table(prodAutom)
+    #return df
+    return prodAutom
                     
 
 
@@ -213,8 +216,9 @@ def concatAEF(automate1,automate2):
         concatAutom['transitions'].append(new_transition)   
 
 
-    df = q1.dict_to_table(concatAutom)
-    return df
+    #df = q1.dict_to_table(concatAutom)
+    #return df
+    return concatAutom
 
 
 
