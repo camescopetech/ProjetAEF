@@ -136,7 +136,7 @@ def produit_aefs(automate1, automate2):
     # final state
     # A state is final in the product if and only if each component is final in its respective automaton
     if automate1['final_states'] and automate2['final_states']:
-        prodAutom['final_states'] = [f"{automate1['final_states'][1]},{automate2['final_states'][1]}"]
+        prodAutom['final_states'] = [f"{automate1['final_states']},{automate2['final_states']}"]
 
 
 
