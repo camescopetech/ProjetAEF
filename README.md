@@ -2,7 +2,7 @@
 
 This project is a school assignment designed by BEZET Camille, SALAVILLE Erwan, FORTIER Théo, EL MABROUK Imen et GARCIA-MEGEVAND Thibault
 
-You will find a graphical interface allowing the manipulation of automata by subjecting them to various processing and testing
+You will find a graphical interface allowing the manipulation of automaton by subjecting them to various processing and testing
 
 ## Use
 
