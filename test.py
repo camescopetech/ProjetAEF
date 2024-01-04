@@ -21,6 +21,17 @@ automate= {     #automate nonComplet
     ]
 }
 
+automate_non_emonde = {
+    'alphabet': ['a', 'b','c'], 
+    'states': ['0', '1', '3'], 
+    'initial_state': '0', 
+    'final_states': ['3'], 
+    'transitions': [
+        ['0', '1', 'a'], 
+        ['0', '3', 'b'], 
+        ['0', '3', 'c']
+    ]
+}
 
 automateEquivalent = {     #automate nonComplet 
     'alphabet': ['a','b'],
@@ -158,16 +169,15 @@ else :
     print("Erreur test question 10")
 
 #11. Rendre un automate émondé.
-import excise as q11
-automateEmonde=q11.remove_unreachable_states(automate)
-automateEmonde=q11.remove_epsilon_transitions(automate)
-if (automateEmonde == None):
+import minimal_q12 as q12
+automatonEmonde = q1.table_to_dict(q12.minimal_automaton(automate_non_emonde))
+if (automatonEmonde == {'alphabet': ['b', 'c'], 'states': ['0', '3'], 'initial_state': '0', 'final_states': ['3'], 'transitions': [['0', '3', 'b'], ['0', '3', 'c']]}):
         print("Question 11 test ok")
 else :
     print("Erreur test question 11")
 
 #12. Rendre un automate minimal.
-import minimal_q12 as q12
+
 if (q8.is_automate_equivalent(automate,q12.minimal_automaton(automate)) == True):
         print("Question 12 test ok")
 else :
