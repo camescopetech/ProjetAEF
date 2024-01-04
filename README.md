@@ -1,6 +1,6 @@
 # ProjetAEF
 
-This project is a school assignment designed by BEZET Camille, SALAVILLE Erwan, FORTIER Théo, EL MABROUK Imen et GARCIA-MEGEVAND Thibault
+This project is a school assignment designed by BEZET Camille, SALAVILLE Erwan, FORTIER Théo, EL MABROUK Imen et GARCIA-MEGEVAND Thibault. We are the group2 in the python project.
 
 You will find a graphical interface allowing the manipulation of automaton by subjecting them to various processing and testing
 
