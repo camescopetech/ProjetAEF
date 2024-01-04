@@ -1,1 +1,180 @@
-{'alphabet': ['a', 'b'], 'states': ['0', '1', '2', '3'], 'initial_state': '0', 'final_states': ['2', '3'], 'transitions': [['0', '1', 'b'], ['0', '3', 'a'], ['1', '1', 'a'], ['1', '2', 'b'], ['3', '3', 'a']]}
+# AUTOMATE
+{
+    'alphabet': ['a', 'b'], 
+    'states': ['0', '1', '2', '3'], 
+    'initial_state': '0', 
+    'final_states': ['2', '3'], 
+    'transitions': [
+        ['0', '1', 'b'], 
+        ['0', '3', 'a'], 
+        ['1', '1', 'a'], 
+        ['1', '2', 'b'], 
+        ['3', '3', 'a']
+    ]
+}
+
+# AUTOMATE COMPLET
+{
+"alphabet": ["a", "b"],
+ "states": ["0", "1", "2", "3", "phi"],
+ "initial_state": "0",
+ "final_states": ["2", "3"],
+ "transitions": [
+ ["0", "1", "b"],
+ ["0", "3", "a"],
+ ["1", "1", "a"],
+ ["1", "2", "b"],
+ ["2", "phi", "a"],
+ ["2", "phi", "b"],
+ ["3", "3", "a"],
+ ["3", "phi", "b"],
+ ["phi", "phi", "a"],
+ ["phi", "phi", "b"]
+ ]
+}
+
+# AUTOMATE DETERMINISTE
+{
+"alphabet": ["a", "b"],
+ "states": ["0", "3", "1", "2"],
+ "initial_state": "0",
+ "final_states": ["2", "3"],
+ "transitions": [
+ ["0", "1", "b"],
+ ["0", "3", "a"],
+ ["1", "1", "a"],
+ ["1", "2", "b"],
+ ["3", "3", "a"]
+ ]
+}
+
+# COMPLÉMENT DE L'AUTOMATE
+{
+"alphabet": ["a", "b"],
+ "states": ["0", "1", "2", "3"],
+ "initial_state": "0",
+ "final_states": ["0", "1"],
+ "transitions": [
+ ["0", "1", "b"],
+ ["0", "3", "a"],
+ ["1", "1", "a"],
+ ["1", "2", "b"],
+ ["3", "3", "a"]
+ ]
+}
+
+# MIROIR DE L'AUTOMATE
+{
+"alphabet": ["a", "b"],
+ "states": ["0", "1", "2", "3"],
+ "initial_state": ["2", "3"],
+ "final_states": ["0"],
+ "transitions": [
+ ["1", "0", "b"],
+ ["3", "0", "a"],
+ ["1", "1", "a"],
+ ["2", "1", "b"],
+ ["3", "3", "a"]
+ ]
+}
+
+#PRODUIT DE CET AUTOMATE PAR  LUI MEME
+{
+"alphabet": ["a", "b"],
+ "states": ["0,0", "0,1", "0,2", "0,3", "1,0", "1,1", "1,2", "1,3", "2,0", "2,1", "2,2", "2,3", "3,0", "3,1", "3,2", "3,3"],
+ "initial_state": ["0,0"],
+ "final_states": ["['2', '3'], ['2', '3']"],
+ "transitions": [
+ ["0,0", "3,3", "a"],
+ ["0,0", "1,1", "b"],
+ ["1,1", "1,1", "a"],
+ ["1,1", "2,2", "b"],
+ ["3,3", "3,3", "a"]
+ ]
+}
+
+# CONCATÉNATION DE CET AUTOMATE AVEC LUI MEME{
+"alphabet": ["a", "b"],
+ "states": ["0", "1", "2", "3", "0", "1", "2", "3"],
+ "initial_state": "0",
+ "final_states": ["2", "3"],
+ "transitions": [
+ ["0", "1", "b"],
+ ["0", "3", "a"],
+ ["1", "1", "a"],
+ ["1", "2", "b"],
+ ["3", "3", "a"],
+ ["0", "1", "b"],
+ ["0", "3", "a"],
+ ["1", "1", "a"],
+ ["1", "2", "b"],
+ ["3", "3", "a"]
+ ]
+}
+
+# L'EXPRESSION RÉGULIÈRE EST ^(a+|ba*b)$
+
+# LE LANGAGE RECONNU EST {w ∈ {a, b}| w satisfait ^(a+|ba*b)$}
+
+# ÉMONDÉ
+On part de cet automate :
+{
+'alphabet': ['a', 'b'], 
+'states': ['0', '1', '2', '3'],
+'initial_state': '0', 
+'final_states': ['2', '3'], 
+'transitions': [
+['0', '1', 'b'], 
+['0', '3', 'a'], 
+['1', '1', 'a'], 
+['1', '2', 'b'], 
+['3', '3', 'a'],
+['3', '2', 'a']
+
+]
+}
+On obtient :
+
+
+
+# MINIMAL
+L'automate est déjà minimal.
+Si on part de cet automate : 
+{
+    'alphabet': ['a', 'b','c','d'],
+    'states': [ 'q1', 'q2','q3','q4','q5','q6','q7'],
+    'initial_state': 'q1',
+    'final_states': ['q3','q4'],
+    'transitions': [
+        ['q1', 'q2', 'a'],
+        ['q1', 'q6', 'a'],
+        ['q2', 'q3', 'b'],
+        ['q2', 'q4', 'b'],
+        ['q2', 'q3', 'b'],
+        ['q3', 'q4', 'c'],
+        ['q4', 'q1', 'd'],
+        ['q2', 'q5', 'c'],
+        ['q5', 'q1', 'b'],
+        ['q5', 'q6', 'd'],
+        ['q3', 'q6', 'a'],
+        ['q4', 'q6', 'a'],
+        ['q4', 'q7', 'a'],
+        ['q6', 'q7', 'b']
+    ]
+}
+On obtient :
+{
+"alphabet": ["a", "b", "c", "d"],
+ "states": ["q1", "q2", "q3", "q4", "q5"],
+ "initial_state": "q1",
+ "final_states": ["q3", "q4"],
+ "transitions": [
+ ["q1", "q2", "a"],
+ ["q2", "q3", "b"],
+ ["q2", "q4", "b"],
+ ["q2", "q5", "c"],
+ ["q3", "q4", "c"],
+ ["q4", "q1", "d"],
+ ["q5", "q1", "b"]
+ ]
+}
