@@ -9,9 +9,13 @@ Many files can be found in the git, each file answers one or more question.
 
 ## Use
 
-In order to start the editor only the following command is needed :   
+In order to start the visual interfac :   
 * if your python version is > 3 => pyhton3 index.py  
 * otherwise =>  pyhton index.py
+
+* To start the tests for the project's question :
+* if your python version is > 3 => pyhton3 test.py  
+* otherwise =>  pyhton test.py
 
 Some libraries may need to installed such as : 
 * Pandas
