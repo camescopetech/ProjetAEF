@@ -7,53 +7,6 @@ import pandas as pd
 null_transition  = 'null'
 phi_transition = 'phi'
 
-automate = {
-    'alphabet': ['a','b'],
-    'states' : ['0','1','2','3'],
-    'initial_state' : '0',
-    'final_states' : ['2','3'],
-    'transitions': [
-        ['0','3','a'],
-        ['0','1','b'],
-
-        ['1','2','b'],
-        ['1','1','a'],
-
-        ['3','3','a']
-    ]
-}
-
-
-automate2 = {
-    'alphabet': ['a','b'],
-    'states' : ['q0','q1','q2','q3'],
-    'initial_state' : 'q0',
-    'final_states' : ['q2','q3'],
-    'transitions': [
-        ['q0','q3','a'],
-        ['q0','q1','b'],
-
-        ['q1','q1','b'],
-        ['q1','q2','a'],
-
-        ['q3','q3','a']
-    ]
-}
-
-automate3 = {
-    'alphabet': ['a', 'b'],
-    'states': ['X', 'Y', 'Z', 'T'],
-    'initial_state': 'X',
-    'final_states': ['Z', 'T'],
-    'transitions': [
-        ['X', 'Z', 'a'],
-        ['X', 'Y', 'b'],
-        ['Z', 'Z', 'a'],
-        ['Y', 'Y', 'a'],
-        ['Y', 'T', 'b']
-    ]
-}
-
 
 
 # ************************ FONCTION COMPLEMENT ******************************
