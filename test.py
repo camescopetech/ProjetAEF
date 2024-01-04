@@ -121,8 +121,12 @@ else :
 
     #7. Produit de deux AEF 
     
-print(q7.produit_aefs(automate,automateEquivalent))
-
+if (q7.produit_aefs(automate,automate) == {'alphabet': ['a', 'b'], 'states': ['0,0', '0,1', '1,0', '1,1'], 'initial_state': ['0,0'], 'final_states': ["['1'],['1']"], 'transitions': [['0,0', '1,1', 'a'], ['1,1', '0,0', 'b']]}):
+    print("Question 7 PRODUIT test ok")
+else :
+     print("Erreur test question 7 PRODUIT")
+    
+    
     #7. Concaténation de deux AEF
     
 if (q7.concatAEF(automate,automate) == {'alphabet': ['a', 'b'], 'states': ['0', '1', '0', '1'], 'initial_state': '0', 'final_states': ['1'], 'transitions': [['0', '1', 'a'], ['1', '0', 'b'], ['0', '1', 'a'], ['1', '0', 'b']]}):
