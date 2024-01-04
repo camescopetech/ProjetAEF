@@ -412,6 +412,10 @@ Function which links the function of the question 12 to the HMI
 def question12():
 
     if formatVerifBool():
+
+        automate = jsonLoads()
+
+        
         if not determinist.is_automaton_deterministic(automate)[0] :
             automate = determinist.to_automaton_deterministic(automate)
             insertTerminal("Warning : Only deterministic automaton can be minimal. The automaton is now deterministic")
