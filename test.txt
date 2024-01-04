@@ -1,4 +1,4 @@
-# AUTOMATE
+# AUTOMATE1 DE DÉPART
 {
     'alphabet': ['a', 'b'], 
     'states': ['0', '1', '2', '3'], 
@@ -13,7 +13,7 @@
     ]
 }
 
-# AUTOMATE COMPLET
+# AUTOMATE COMPLET OBTENU À PARTIE DE AUTOMATE1
 {
 "alphabet": ["a", "b"],
  "states": ["0", "1", "2", "3", "phi"],
@@ -33,7 +33,7 @@
  ]
 }
 
-# AUTOMATE DETERMINISTE
+# AUTOMATE DETERMINISTE OBTENU À PARTIR DE AUTOMATE1
 {
 "alphabet": ["a", "b"],
  "states": ["0", "3", "1", "2"],
@@ -48,7 +48,7 @@
  ]
 }
 
-# COMPLÉMENT DE L'AUTOMATE
+# COMPLÉMENT DE L'AUTOMATE1
 {
 "alphabet": ["a", "b"],
  "states": ["0", "1", "2", "3"],
@@ -63,7 +63,7 @@
  ]
 }
 
-# MIROIR DE L'AUTOMATE
+# MIROIR DE L'AUTOMATE1
 {
 "alphabet": ["a", "b"],
  "states": ["0", "1", "2", "3"],
@@ -78,7 +78,7 @@
  ]
 }
 
-#PRODUIT DE CET AUTOMATE PAR  LUI MEME
+#PRODUIT DE CET AUTOMATE1 PAR  LUI MEME
 {
 "alphabet": ["a", "b"],
  "states": ["0,0", "0,1", "0,2", "0,3", "1,0", "1,1", "1,2", "1,3", "2,0", "2,1", "2,2", "2,3", "3,0", "3,1", "3,2", "3,3"],
@@ -93,7 +93,8 @@
  ]
 }
 
-# CONCATÉNATION DE CET AUTOMATE AVEC LUI MEME{
+# CONCATÉNATION DE CET AUTOMATE1 AVEC LUI MEME
+{
 "alphabet": ["a", "b"],
  "states": ["0", "1", "2", "3", "0", "1", "2", "3"],
  "initial_state": "0",
@@ -112,9 +113,9 @@
  ]
 }
 
-# L'EXPRESSION RÉGULIÈRE EST ^(a+|ba*b)$
+# L'EXPRESSION RÉGULIÈRE DE L'AUTOMATE1 EST ^(a+|ba*b)$
 
-# LE LANGAGE RECONNU EST {w ∈ {a, b}| w satisfait ^(a+|ba*b)$}
+# LE LANGAGE RECONNU PAR L'AUTOMATE1 EST {w ∈ {a, b}| w satisfait ^(a+|ba*b)$}
 
 # ÉMONDÉ
 On part de cet automate :
@@ -138,7 +139,7 @@ On obtient :
 
 
 # MINIMAL
-L'automate est déjà minimal.
+L'automate1 est déjà minimal.
 Si on part de cet automate : 
 {
     'alphabet': ['a', 'b','c','d'],
@@ -162,7 +163,7 @@ Si on part de cet automate :
         ['q6', 'q7', 'b']
     ]
 }
-On obtient :
+On obtient cet automate :
 {
 "alphabet": ["a", "b", "c", "d"],
  "states": ["q1", "q2", "q3", "q4", "q5"],
