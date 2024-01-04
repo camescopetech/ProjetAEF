@@ -5,7 +5,7 @@ This project is a school assignment designed by BEZET Camille, SALAVILLE Erwan, 
 You will find a graphical interface allowing the manipulation of automaton by subjecting them to various processing and testing
 
 Many files can be found in the git, each file answers one or more question. 
-.txt files are here to explain some functions or be used as a test automaton (such as the text.txt)
+.txt files are here to explain some functions or be used as a test automaton (such as the test.txt)
 
 ## Use
 
