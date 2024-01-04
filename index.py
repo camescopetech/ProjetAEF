@@ -19,6 +19,7 @@ Insert a line on the app-terminal
 """
 def insertTerminal(line):
     terminal.insert(tk.END, "> " + line + "\n")
+    terminal.see(tk.END)
 """
 Check if the json format is correct
 @return: Boolean 
@@ -117,7 +118,7 @@ def  json2loadsAndVerif():
         return [json1,json2]
 
     else:
-        insertTerminal("ERREUR: Les deux JSON doivent être separé par un saut de ligne")
+        insertTerminal("ERREUR: Les deux JSON doivent être separé par un retour à la ligne")
         return ['','']
 """
 Create an insert pop up
@@ -173,7 +174,7 @@ def addFile():
     file_path = filedialog.askopenfilename()
     if file_path:
         with open(file_path, 'r') as file:
-            content = file.read()
+            content = '\n' + file.read()
             textArea.insert(tk.END, content)
 """
 Save the text area on a new file
@@ -219,21 +220,21 @@ def formatVerif():
 
     listError = [
         "OK",
-        "Not a json",
-        "The keys are false",
-        "Transition must have three elements",
-        "Initial_state must have one element",
-        "Element in 'alphabet', 'states' and 'final_states' must have any occurrence",
-        "Alphabet is not correct",
-        "States is not correct",
-        "States must contain initial_state AND initial_state must have one element",
-        "States must contain final_states"
+        "Ce n'est pas du JSON",
+        "Les clés sont incorrectes",
+        "La transition doit avoir trois éléments",
+        "L'état initial doit avoir un élément",
+        "Les éléments dans 'alphabet', 'states' et 'final_states' doivent avoir au moins une occurrence",
+        "L'alphabet n'est pas correct",
+        "Les états ne sont pas corrects",
+        "Les états doivent contenir initial_state ET initial_state doit avoir un élément",
+        "Les états doivent contenir final_states"
     ]
 
     if automate_verif == 0:
         line = listError[0]
     else:
-        line =  "ERROR" + str(automate_verif) + ": " + listError[automate_verif]
+        line =  "ERREUR" + str(automate_verif) + ": " + listError[automate_verif]
     
     insertTerminal(line)
     terminal.yview(tk.END)
