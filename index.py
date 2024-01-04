@@ -470,7 +470,7 @@ menu.add_cascade(label="Fonction", menu=menu_function)
 
 #MenuFunction
 menu.add_command(label="Verification", command=formatVerif)
-menu.add_command(label="Shema", command=drawAutomate)
+menu.add_command(label="Schema", command=drawAutomate)
 
 #mainloop
 root.config(menu=menu)
